@@ -1,10 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>http://mvtnorm.R-forge.R-project.org/404.html</loc></url>
+<url><loc>http://mvtnorm.R-forge.R-project.org/SKILL.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/articles/dqmc-benchmark.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/articles/dqmc-methods.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/articles/index.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/authors.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/index.html</loc></url>
+<url><loc>http://mvtnorm.R-forge.R-project.org/news/index.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/reference/Mvt.html</loc></url>
 <url><loc>http://mvtnorm.R-forge.R-project.org/reference/algorithms.html</loc></url>

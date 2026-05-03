@@ -1,7 +1,7 @@
 a4484049e879aef80ac2d2ccab44262a *build/partial.rdb
 b01cb8fe0542e3b896fac23d33c6db09 *build/vignette.rds
 3d99dd47f69e76b29b9c3d6f161567cf *cleanup
-402cd0e58beb99dd3c756b07ee3139f2 *DESCRIPTION
+95db5b878dde181d654e5c0225eb7c7d *DESCRIPTION
 ceb9f3d20b3e0f3ecd95cefd43449da1 *inst/C_API_Example/DESCRIPTION
 ca4c35956e7a8aa253e2c52cd49f0d99 *inst/C_API_Example/NAMESPACE
 990127bb625b41c7181a653020e3f6a9 *inst/C_API_Example/R/test.R
@@ -39,7 +39,7 @@ c5726048616e594ad590dd5545fb2d15 *man/pmvnorm.Rd
 1281ca46c3823156b18ca36405a67a63 *man/qmvnorm.Rd
 e62235aa361322c23acb6f1cb9e81778 *man/qmvt.Rd
 b79c8be211fcdf6913f3e8db2a3c870a *NAMESPACE
-2f11d2b8822058523c0900f52645cae5 *NEWS.md
+cb2090739dc201df1fcce0e67223e344 *NEWS.md
 e6d818c3d0fe47f6560e54cc74b4e1ee *R/interface.R
 7006cc97811c2cad0d14c6c602baa8e6 *R/lpmvnorm.R
 6167d2e4640c9772f24ac1e627fbc342 *R/ltMatrices.R

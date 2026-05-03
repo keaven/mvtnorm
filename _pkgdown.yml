@@ -5,7 +5,7 @@ template:
 
 navbar:
   structure:
-    left: [reference, articles]
+    left: [reference, articles, news]
 
 articles:
 - title: Deterministic QMC

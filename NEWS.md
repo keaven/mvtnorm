@@ -1,10 +1,7 @@
-# mvtnorm deterministic QMC branch NEWS
+# mvtnorm 1.3-7.9000
 
-This file summarizes repository-level development work on the
-`Deterministic-QMC-algorithm` branch. The package's historical CRAN release
-notes remain in `inst/NEWS.Rd`.
-
-## Development version, 2026-05-03
+Development version for the `Deterministic-QMC-algorithm` branch. The
+package's historical CRAN release notes remain in `inst/NEWS.Rd`.
 
 ### New
 
