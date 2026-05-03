@@ -20,8 +20,24 @@ void C_mvtdst(int *n, int *nu, double *lower, double *upper,
               int *infin, double *corr, double *delta,
               int *maxpts, double *abseps, double *releps,
               double *error, double *value, int *inform, int *rnd);
+void C_mvtdst_dqmc(int *n, int *nu, double *lower, double *upper,
+                   int *infin, double *corr, double *delta,
+                   int *maxpts, double *abseps, double *releps,
+                   double *error, double *value, int *inform, int *start);
+
+void mvtnorm_set_dqmc(int use_dqmc, unsigned int start);
 
 extern SEXP R_miwa(SEXP steps, SEXP corr, SEXP upper, SEXP lower, SEXP infin);
+extern SEXP R_dqmc_metal_available(void);
+extern SEXP R_dqmc_mvn(SEXP lower, SEXP upper, SEXP corr, SEXP delta, SEXP infin,
+                       SEXP maxpts, SEXP start);
+extern SEXP R_dqmc_mvn_sobol(SEXP lower, SEXP upper, SEXP corr, SEXP delta,
+                             SEXP infin, SEXP maxpts, SEXP start);
+extern SEXP R_dqmc_mvn_hybrid(SEXP lower, SEXP upper, SEXP corr, SEXP delta,
+                              SEXP infin, SEXP maxpts, SEXP start);
+extern SEXP R_dqmc_mvn_genzsobol(SEXP lower, SEXP upper, SEXP corr,
+                                 SEXP delta, SEXP infin, SEXP maxpts,
+                                 SEXP abseps, SEXP releps, SEXP start);
 extern SEXP R_ltMatrices_solve (SEXP C, SEXP y, SEXP N, SEXP J, SEXP diag, SEXP transpose);
 extern SEXP R_ltMatrices_solve_C (SEXP C, SEXP N, SEXP J, SEXP diag, SEXP transpose);
 extern SEXP R_ltMatrices_tcrossprod (SEXP C, SEXP N, SEXP J, SEXP diag, SEXP diag_only, SEXP transpose);

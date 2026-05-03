@@ -1,0 +1,243 @@
+\documentclass[11pt]{article}
+\usepackage[round]{natbib}
+\usepackage{hyperref}
+
+%\VignetteIndexEntry{Deterministic QMC methodology in mvtnorm}
+%\VignetteDepends{mvtnorm}
+%\VignetteKeywords{multivariate normal distribution, quasi-Monte Carlo}
+%\VignettePackage{mvtnorm}
+%\VignetteEngine{utils::Sweave}
+
+\newcommand{\pkg}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\R}{\textsf{R}}
+
+\begin{document}
+
+\title{Deterministic QMC Methodology in \pkg{mvtnorm}}
+\author{The \pkg{mvtnorm} authors}
+\maketitle
+
+<<setup, echo=FALSE>>=
+library("mvtnorm")
+@
+
+\section{The computational problem}
+
+The functions \code{pmvnorm} and \code{pmvt} evaluate probabilities over
+rectangular regions for multivariate normal and Student $t$ distributions.
+After standardisation, the central numerical problem is the evaluation of an
+integral over a hyperrectangle with dependence induced by a correlation matrix.
+For dimensions beyond the very small cases, direct tensor-product quadrature is
+not competitive because its cost grows exponentially with dimension.
+
+The default \pkg{mvtnorm} algorithm is the Genz-Bretz randomized
+quasi-Monte Carlo (QMC) method \citep{numerical-:1992,numerical-:1999,
+Genz_Bretz_2002,Genz_Bretz_2009}. This method transforms the original
+probability into an integral over the unit cube and estimates that integral by
+using low-discrepancy points with randomization. The randomization is useful:
+it gives an empirical Monte Carlo error assessment and, in practice, high speed
+for many medium- and high-dimensional problems.
+
+The new \code{DeterministicQMC} option keeps the same general transformed
+integration viewpoint, but removes dependence on \R's random-number generator.
+The plain C backends implement normal probabilities by combining a Cholesky
+factorization and the sequential conditional transformation used in Genz type
+algorithms.  The \code{"c"} backend uses a deterministic Halton rule; the
+\code{"sobol"} backend uses a deterministic Sobol digital net; the
+\code{"hybrid"} backend tests a Sobol rule with a deterministic tail-spaced
+change of variables; the \code{"genzsobol"} backend adds marginal-width
+variable reordering and embedded stability checks.  The original FORTRAN code
+is retained as a reference and as a fallback, including for Student $t$
+probabilities in the current implementation.  The default deterministic
+choice, \code{"auto"}, now selects a cross-checked Genz-Sobol policy for
+supported normal problems and keeps the deterministic FORTRAN path for
+higher-dimensional normal problems or Student $t$ probabilities.
+
+\section{Algorithms available in this comparison}
+
+\begin{center}
+\begin{tabular}{p{0.22\linewidth}p{0.34\linewidth}p{0.34\linewidth}}
+\hline
+Algorithm & Main advantages & Main limitations \\
+\hline
+\code{GenzBretz} default &
+Fast randomized QMC; supports normal and $t$ probabilities; has a randomized
+error estimate; is the mature default for general use. &
+Repeated calls can differ unless the seed is controlled; stochastic noise can
+be inconvenient inside deterministic optimization or regression tests. \\
+\code{Miwa} &
+Deterministic; often highly accurate for low-dimensional normal probabilities;
+does not depend on random seeds. &
+Limited to normal probabilities and dimensions up to 20; cost grows quickly
+with dimension and the number of grid steps. \\
+Original fixed-budget QMC &
+Uses the established Genz-Bretz randomized QMC implementation with early
+stopping disabled, making the computational budget easier to compare. &
+Still randomized; reported error is tied to randomized replication; speed is
+budget dependent. \\
+\code{DeterministicQMC} &
+Deterministic output without managing \R's RNG state; plain C Halton, Sobol,
+hybrid, and Genz-Sobol normal backends; FORTRAN reference/fallback remains
+available; scales by a point budget rather than by a grid in each dimension. &
+The C backends currently handle normal probabilities only; the deterministic
+error values are convergence diagnostics, not randomized confidence statements;
+the implementation is intentionally conservative and does not yet include all
+adaptations from the mature FORTRAN path. \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{What is new}
+
+The new backend is not a replacement for the original FORTRAN routines.  It is
+a second deterministic route through the same \pkg{mvtnorm} interface:
+
+\begin{itemize}
+\item It introduces a plain C implementation for multivariate normal
+probabilities, callable through \code{DeterministicQMC(backend = "c")} for a
+Halton rule and \code{DeterministicQMC(backend = "sobol")} for Sobol direction
+numbers with Gray-code point generation.
+\item It includes an experimental \code{DeterministicQMC(backend = "hybrid")}
+path that uses the Sobol generator with a deterministic tail-spaced change of
+variables and Jacobian correction.  This is intended to test whether sparse
+tail spacing improves fixed-budget accuracy.
+\item It includes \code{DeterministicQMC(backend = "genzsobol")}, which adds
+two algorithmic pieces from the proposed fuller backend: variables are
+reordered by marginal probability width before the Cholesky factorization, and
+estimates are checked at embedded powers of two against \code{abseps} and
+\code{releps}.
+\item It leaves the FORTRAN implementation in place as a reference and
+fallback.  This is useful both scientifically and practically: numerical
+changes can be checked against the historical implementation.
+\item It adds \code{DeterministicQMC(backend = "auto")} as a best-practice
+deterministic selector that uses cross-checked Genz-Sobol when supported and
+deterministic FORTRAN when the C Sobol path is not available.
+\item It separates determinism from the Miwa algorithm.  Miwa's method is
+deterministic because it is a low-dimensional grid algorithm; the new method is
+deterministic because the integration points are fixed.  Thus the new method
+can be used with a budget such as \code{maxpts = 25000}, just as randomized QMC
+is used.
+\item It gives deterministic, seed-independent results, which is helpful for
+test suites, simulation studies that need exact reproducibility, and objective
+functions used by optimizers.
+\end{itemize}
+
+The main advantage over the previous deterministic option, \code{Miwa}, is
+therefore not that it is universally more accurate.  Rather, the new method is
+designed to give deterministic QMC behavior under the same kind of point-budget
+control as \code{GenzBretz}.  This makes it attractive when reproducibility is
+more important than randomized error assessment, especially as dimension grows
+beyond the range where a grid method is comfortable.
+
+\section{Backend choices}
+
+The constructor exposes backend choices explicitly:
+
+<<constructors, echo=TRUE>>=
+GenzBretz()
+DeterministicQMC(backend = "auto")
+DeterministicQMC(backend = "c")
+DeterministicQMC(backend = "sobol")
+DeterministicQMC(backend = "hybrid")
+DeterministicQMC(backend = "genzsobol")
+DeterministicQMC(backend = "fortran")
+Miwa()
+@
+
+With \code{backend = "auto"}, supported normal probabilities use the C
+Genz-Sobol backend and Student $t$ probabilities use the deterministic FORTRAN
+fallback.  More specifically, the C path uses several fixed deterministic
+sequence offsets; the reported error is the larger of the
+embedded convergence errors and the between-check spread.  The \code{"cpu"}
+alias maps to \code{"c"}.  The \code{"metal"} option currently probes for a
+macOS Metal device but falls back to C/FORTRAN because no Metal evaluator is
+implemented yet.
+
+\section{The Genz-Sobol backends and the faster target}
+
+The first C backend deliberately used a simple deterministic Halton rule.  The
+new \code{backend = "sobol"} implements the next point-generator step: it keeps
+the sequential Genz transformation and replaces Halton points with an embedded
+Sobol digital net generated from direction numbers in plain C.  The
+experimental \code{backend = "hybrid"} keeps that Sobol backbone and applies a
+gentle deterministic tail-spaced warp with a Jacobian adjustment.  This lets
+the benchmark test the nonuniform-grid idea without replacing QMC by a tensor
+grid.  The \code{backend = "genzsobol"} option keeps the Sobol backbone,
+reorders variables before factorization, and can stop early when embedded
+powers-of-two estimates stabilize.
+
+The backend is still intentionally conservative.  It does not yet include all
+of the refinements that make the mature randomized Genz-Bretz path so
+effective, but \code{backend = "auto"} now implements the first automatic
+policy: run Genz-Sobol at several fixed deterministic sequence offsets,
+combine the estimates, and use the larger of embedded convergence error and
+between-check spread as the accuracy diagnostic.  When a tolerance is
+requested, the repeated checks are run against a tighter internal target before
+the combined diagnostic is compared with the user-requested tolerance.  The
+remaining speed-and-accuracy target is to add:
+
+\begin{itemize}
+\item reorder variables before integration so that the transformed integrand
+has lower effective dimension;
+\item compare the Sobol backend with the experimental tail-spaced hybrid;
+\item replace the present fixed sequence offsets by stronger deterministic
+digital shifts or rank-1 lattice shifts while preserving exact reproducibility;
+\item adaptively double the point budget until embedded estimates stabilize;
+\item fall back to the deterministic FORTRAN reference path, or to a larger
+budget, when the deterministic stability diagnostic is poor.
+\end{itemize}
+
+The Sobol backend does not have the same randomized error interpretation as
+\code{GenzBretz}, because that interpretation comes from randomization.  Its
+goal is instead comparable numerical accuracy with deterministic output.  This
+is plausible because it uses the same Genz-style conditioning strategy and a
+stronger low-discrepancy design than plain Halton; further effective-dimension
+reduction remains a natural enhancement.  The hybrid is useful to test because
+it preserves the Sobol backbone while borrowing the best part of nonuniform
+grids: not all tail regions deserve the same local resolution.  The
+\code{genzsobol} backend is the first implemented version that uses reordering
+and embedded deterministic stopping together, while \code{backend = "auto"}
+adds the outer deterministic cross-check policy that makes the error attribute
+more useful in unattended workflows.
+
+\section{Accuracy requests and warning}
+
+Users can request diagnostic error control with the familiar \code{abseps} and
+\code{releps} arguments:
+
+<<accuracy-request, echo=TRUE>>=
+DeterministicQMC(maxpts = 100000, abseps = 1e-6, releps = 0,
+                 backend = "auto")
+@
+
+For \code{DeterministicQMC}, this is a deterministic stability target.  If the
+reported diagnostic is larger than the requested absolute or relative
+tolerance after the available \code{maxpts} budget is spent, the result is
+returned with \code{inform = 1} and the message
+\code{"Completion with error > abseps"}.  This is useful for unattended
+deterministic workflows because the caller can detect that the reproducible
+diagnostic did not certify the requested target.
+
+The warning is that this diagnostic is not the same object as the randomized
+Monte Carlo error reported by \code{GenzBretz}.  It is not a confidence
+interval, and it is not a rigorous deterministic error bound.  It should be
+read as a reproducible convergence and stability check.
+
+\section{Practical interpretation}
+
+For exploratory probability calculations, \code{GenzBretz} remains the best
+default because it is mature, fast, and supplies an error estimate based on
+randomization.  For low-dimensional normal probabilities, \code{Miwa} remains
+valuable as a deterministic check.  The new \code{DeterministicQMC} backend is
+most useful when exact reproducibility of the numerical path is required and
+the user wants a QMC-like budget rather than a low-dimensional grid.
+
+The deterministic error reported by \code{DeterministicQMC} should be read as a
+stability diagnostic across deterministic blocks.  It is not the same object as
+the randomized Monte Carlo error reported by \code{GenzBretz}.
+
+\bibliographystyle{jss}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "mvtnorm"))}}
+
+\end{document}

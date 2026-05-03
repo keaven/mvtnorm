@@ -296,7 +296,7 @@ mvt <- function(lower, upper, df, corr, delta, algorithm = GenzBretz(), ...)
     if (all(infin < 0))
         return(list(value = 1, error = 0, msg = "Normal Completion"))
 
-    if(inherits(algorithm, "GenzBretz") && n > 1) {
+    if(inherits(algorithm, "GenzBretz") && !inherits(algorithm, "DeterministicQMC") && n > 1) {
         corr <- matrix(as.vector(corr), ncol=n, byrow=TRUE)
         corr <- corr[upper.tri(corr)]
     }
@@ -310,8 +310,21 @@ mvt <- function(lower, upper, df, corr, delta, algorithm = GenzBretz(), ...)
     else if (inform == 3) "Covariance matrix not positive semidefinite"
     else inform
 
+    algorithm_class <- class(algorithm)
+    algorithm_info <- NULL
+    backend <- attr(ret, "backend", exact = TRUE)
+    diagnostics <- attr(ret, "diagnostics", exact = TRUE)
+    if (inherits(algorithm, "DeterministicQMC")) {
+        algorithm_info <- algorithm_class
+        if (!is.null(backend))
+            attr(algorithm_info, "backend") <- backend
+        if (!is.null(diagnostics))
+            attr(algorithm_info, "diagnostics") <- diagnostics
+    }
+
     ## return including error est. and msg:
-    list(value = ret$value, error = ret$error, msg = msg, algo = class(algorithm))
+    list(value = ret$value, error = ret$error, msg = msg,
+         algo = algorithm_class, algorithm = algorithm_info)
 }
 
 rmvt <- function(n, sigma = diag(2), df = 1,
@@ -613,6 +626,22 @@ GenzBretz <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
               class = "GenzBretz")
 }
 
+DeterministicQMC <- function(maxpts = 25000, abseps = 0.001, releps = 0,
+                             backend = c("auto", "c", "sobol", "hybrid",
+                                         "genzsobol", "fortran", "cpu",
+                                         "metal"),
+                             start = 0L) {
+    backend <- match.arg(backend)
+    if (length(start) != 1L || is.na(start) || start < 0 ||
+        start > .Machine$integer.max)
+        stop(sQuote("start"), " must be a non-negative integer")
+    if (identical(backend, "cpu"))
+        backend <- "c"
+    structure(list(maxpts = maxpts, abseps = abseps, releps = releps,
+                   backend = backend, start = as.integer(start)),
+              class = c("DeterministicQMC", "GenzBretz"))
+}
+
 Miwa <- function(steps = 128, checkCorr = TRUE, maxval = 1e3) {
     if (steps > 4097) stop("maximum number of steps is 4097") # MAXGRD in ../src/miwa.h
     structure(list(steps = steps, checkCorr=checkCorr, maxval = maxval), class = "Miwa")
@@ -645,6 +674,235 @@ probval.GenzBretz <- function(x, n, df, lower, upper, infin, corrF, delta, ...)
        value = as.double(value),
        inform = as.integer(inform),
        RND = as.integer(1)) ### init RNG
+}
+
+.dqmc_metal_available <- local({
+    available <- NULL
+    function() {
+        if (is.null(available))
+            available <<- isTRUE(.Call(mvtnorm_R_dqmc_metal_available))
+        available
+    }
+})
+
+.dqmc_backend <- function(x, df, n = NULL) {
+    backend <- x$backend
+    if (identical(backend, "auto")) {
+        if (df == 0 && !is.null(n) && n <= 33)
+            return("auto")
+        return("fortran")
+    }
+    if ((identical(backend, "c") || identical(backend, "sobol") ||
+         identical(backend, "hybrid") || identical(backend, "genzsobol")) &&
+        df != 0) {
+        warning("C deterministic backends are currently implemented for normal probabilities only; ",
+                "using deterministic Fortran backend for t-probabilities",
+                call. = FALSE)
+        return("fortran")
+    }
+    if (identical(backend, "c") || identical(backend, "sobol") ||
+        identical(backend, "hybrid") ||
+        identical(backend, "genzsobol") ||
+        identical(backend, "fortran"))
+        return(backend)
+
+    metal_available <- .dqmc_metal_available()
+    if (identical(backend, "metal") && !metal_available)
+        warning("Metal backend requested but no default Metal device was found; using C/Fortran",
+                call. = FALSE)
+    else if (identical(backend, "metal"))
+        warning("Metal device detected, but the deterministic QMC Metal evaluator ",
+                "is not implemented yet; using C/Fortran", call. = FALSE)
+    if (df == 0) "c" else "fortran"
+}
+
+.dqmc_tolerance <- function(x, value) {
+    tol <- x$abseps
+    if (length(tol) != 1L || is.na(tol) || tol < 0)
+        tol <- 0
+    rtol <- x$releps * abs(value)
+    if (length(rtol) == 1L && !is.na(rtol) && rtol > tol)
+        tol <- rtol
+    tol
+}
+
+.dqmc_targeted <- function(x)
+    (length(x$abseps) == 1L && !is.na(x$abseps) && x$abseps > 0) ||
+    (length(x$releps) == 1L && !is.na(x$releps) && x$releps > 0)
+
+.dqmc_apply_tolerance <- function(ret, x) {
+    if (ret$inform == 0L && .dqmc_targeted(x)) {
+        err <- ret$error
+        if (length(err) == 1L && !is.na(err) &&
+            err > .dqmc_tolerance(x, ret$value))
+            ret$inform <- 1L
+    }
+    ret
+}
+
+.dqmc_start_at <- function(start, offset)
+    as.integer((as.double(start) + as.double(offset)) %%
+               as.double(.Machine$integer.max))
+
+.dqmc_pack_corr <- function(corr, n) {
+    corr <- matrix(as.vector(corr), ncol = n, byrow = TRUE)
+    corr[upper.tri(corr)]
+}
+
+.dqmc_call_c_backend <- function(backend, x, lower, upper, infin, corrF, delta,
+                                 maxpts = x$maxpts, start = x$start) {
+    if (identical(backend, "sobol"))
+        .Call(mvtnorm_R_dqmc_mvn_sobol,
+              as.double(lower),
+              as.double(upper),
+              as.double(corrF),
+              as.double(delta),
+              as.integer(infin),
+              as.integer(maxpts),
+              as.integer(start))
+    else if (identical(backend, "hybrid"))
+        .Call(mvtnorm_R_dqmc_mvn_hybrid,
+              as.double(lower),
+              as.double(upper),
+              as.double(corrF),
+              as.double(delta),
+              as.integer(infin),
+              as.integer(maxpts),
+              as.integer(start))
+    else if (identical(backend, "genzsobol"))
+        .Call(mvtnorm_R_dqmc_mvn_genzsobol,
+              as.double(lower),
+              as.double(upper),
+              as.double(corrF),
+              as.double(delta),
+              as.integer(infin),
+              as.integer(maxpts),
+              as.double(x$abseps),
+              as.double(x$releps),
+              as.integer(start))
+    else
+        .Call(mvtnorm_R_dqmc_mvn,
+              as.double(lower),
+              as.double(upper),
+              as.double(corrF),
+              as.double(delta),
+              as.integer(infin),
+              as.integer(maxpts),
+              as.integer(start))
+}
+
+.dqmc_auto_mvn <- function(x, lower, upper, infin, corrF, delta) {
+    checks <- if (x$maxpts >= 384) 3L else 1L
+    maxpts <- max(1L, as.integer(floor(x$maxpts / checks)))
+    offsets <- c(0L, 104729L, 209759L)
+    vals <- errs <- numeric(checks)
+    inform <- 0L
+    inner_x <- x
+    if (checks > 1L && .dqmc_targeted(x)) {
+        if (length(inner_x$abseps) == 1L && !is.na(inner_x$abseps) &&
+            inner_x$abseps > 0)
+            inner_x$abseps <- inner_x$abseps / 2
+        if (length(inner_x$releps) == 1L && !is.na(inner_x$releps) &&
+            inner_x$releps > 0)
+            inner_x$releps <- inner_x$releps / 2
+    }
+
+    for (i in seq_len(checks)) {
+        ret <- .dqmc_call_c_backend("genzsobol", inner_x, lower, upper, infin,
+                                    corrF, delta, maxpts = maxpts,
+                                    start = .dqmc_start_at(x$start,
+                                                           offsets[i]))
+        if (ret$inform != 0L) {
+            inform <- ret$inform
+            break
+        }
+        vals[i] <- ret$value
+        errs[i] <- ret$error
+    }
+    if (inform != 0L)
+        return(list(value = vals[1L], error = errs[1L], inform = inform))
+
+    value <- mean(vals)
+    within <- max(errs)
+    between <- if (checks > 1L) max(abs(vals - value)) else 0
+    error <- max(within, between)
+    if (.dqmc_targeted(x) && error > .dqmc_tolerance(x, value))
+        inform <- 1L
+
+    ret <- list(value = value, error = error, inform = inform)
+    attr(ret, "backend") <- "auto-genzsobol"
+    attr(ret, "diagnostics") <- list(values = vals, errors = errs,
+                                     maxpts_per_check = maxpts,
+                                     checks = checks)
+    ret
+}
+
+probval.DeterministicQMC <- function(x, n, df, lower, upper, infin, corrF, delta, ...)
+{
+    if(isInf(df)) df <- 0
+
+    backend <- .dqmc_backend(x, df, n)
+    if (identical(backend, "c") || identical(backend, "sobol") ||
+        identical(backend, "hybrid") || identical(backend, "genzsobol") ||
+        identical(backend, "auto")) {
+        ret <- if (identical(backend, "auto"))
+            .dqmc_auto_mvn(x, lower, upper, infin, corrF, delta)
+        else
+            .dqmc_call_c_backend(backend, x, lower, upper, infin, corrF, delta)
+        if (is.null(attr(ret, "backend")))
+            attr(ret, "backend") <- backend
+        ret <- .dqmc_apply_tolerance(ret, x)
+        if (ret$inform == 0 || ret$inform == 1)
+            return(ret)
+        if ((identical(backend, "sobol") || identical(backend, "hybrid") ||
+             identical(backend, "genzsobol")) &&
+            ret$inform == 4) {
+            warning("Sobol-based backends currently support up to 33-dimensional ",
+                    "normal probabilities; using C Halton backend",
+                    call. = FALSE)
+            ret <- .Call(mvtnorm_R_dqmc_mvn,
+                         as.double(lower),
+                         as.double(upper),
+                         as.double(corrF),
+                         as.double(delta),
+                         as.integer(infin),
+                         as.integer(x$maxpts),
+                         as.integer(x$start))
+            ret <- .dqmc_apply_tolerance(ret, x)
+            if (ret$inform == 0) {
+                attr(ret, "backend") <- "c"
+                return(ret)
+            }
+            if (ret$inform == 1) {
+                attr(ret, "backend") <- "c"
+                return(ret)
+            }
+        }
+        warning("C deterministic backend could not factorize the correlation matrix; ",
+                "using deterministic Fortran backend", call. = FALSE)
+    }
+
+    lower[isNInf(lower)] <- 0
+    upper[ isInf(upper)] <- 0
+
+    error <- 0; value <- 0; inform <- 0
+    ret <- .C(mvtnorm_C_mvtdst_dqmc,
+       N = as.integer(n),
+       NU = as.integer(df),
+       LOWER = as.double(lower),
+       UPPER = as.double(upper),
+       INFIN = as.integer(infin),
+       CORREL = as.double(.dqmc_pack_corr(corrF, n)),
+       DELTA = as.double(delta),
+       MAXPTS = as.integer(x$maxpts),
+       ABSEPS = as.double(x$abseps),
+       RELEPS = as.double(x$releps),
+       error = as.double(error),
+       value = as.double(value),
+       inform = as.integer(inform),
+       START = as.integer(x$start))
+    attr(ret, "backend") <- "fortran"
+    ret
 }
 
 probval.Miwa <- function(x, n, df, lower, upper, infin, corr, delta, ...)

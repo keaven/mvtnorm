@@ -8,7 +8,7 @@ importFrom("stats",
 	   cov2cor, optim, coef, glm, pcauchy, qcauchy, predict, quasi, logLik)
 
 export(rmvnorm, dmvnorm, pmvnorm, pmvt, rmvt, qmvnorm, qmvt, dmvt,
-       GenzBretz, Miwa, TVPACK, ltMatrices, syMatrices, as.syMatrices, Tcrossprod, Crossprod, diagonals, 
+       GenzBretz, DeterministicQMC, Miwa, TVPACK, ltMatrices, syMatrices, as.syMatrices, Tcrossprod, Crossprod, diagonals, 
        is.ltMatrices, is.syMatrices, as.ltMatrices, is.chol, is.invchol, as.chol, as.invchol,
        chol2cov, invchol2chol, chol2invchol, invchol2cov, 
        invchol2pre, chol2pre, Dchol, invcholD, chol2cor, invchol2cor,
@@ -65,5 +65,6 @@ S3method("as.ltMatrices", "ltMatrices")
 S3method("as.ltMatrices", "syMatrices")
 ### internal methods
 S3method("probval", "GenzBretz")
+S3method("probval", "DeterministicQMC")
 S3method("probval", "Miwa")
 S3method("probval", "TVPACK")

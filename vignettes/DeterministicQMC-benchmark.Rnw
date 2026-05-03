@@ -1,0 +1,288 @@
+\documentclass[11pt]{article}
+\usepackage[round]{natbib}
+\usepackage{hyperref}
+
+%\VignetteIndexEntry{Speed and accuracy comparison for deterministic QMC}
+%\VignetteDepends{mvtnorm}
+%\VignetteKeywords{multivariate normal distribution, benchmark}
+%\VignettePackage{mvtnorm}
+%\VignetteEngine{utils::Sweave}
+
+\newcommand{\pkg}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+
+\title{Speed and Accuracy Comparison for \code{DeterministicQMC}}
+\author{The \pkg{mvtnorm} authors}
+\maketitle
+
+<<setup, echo=FALSE>>=
+library("mvtnorm")
+@
+
+\section{Purpose}
+
+The default \pkg{mvtnorm} algorithm, \code{GenzBretz}, is randomized
+quasi-Monte Carlo (QMC) \citep{Genz_Bretz_2002,Genz_Bretz_2009}.  Its
+randomization is one reason it is fast and useful: the algorithm can combine
+low-discrepancy integration points with a stochastic error assessment.  The new
+\code{DeterministicQMC} algorithm removes that randomization, so the relevant
+question is empirical as well as methodological: how much speed is traded for
+deterministic reproducibility, and how close are the resulting probabilities on
+representative problems?
+
+This vignette compares eight choices:
+
+\begin{itemize}
+\item \code{GenzBretz()}: the current default, with its default stopping
+tolerances.
+\item \code{Miwa(steps = 128)}: the established deterministic low-dimensional
+normal algorithm.
+\item original randomized QMC: \code{GenzBretz(maxpts = 25000, abseps = 0,
+releps = 0)}, which disables early stopping and uses the historical
+Genz-Bretz QMC implementation at a fixed point budget.
+\item \code{DeterministicQMC(maxpts = 25000, backend = "c")}: the new plain C
+deterministic Halton backend for normal probabilities.
+\item \code{DeterministicQMC(maxpts = 25000, backend = "sobol")}: the new
+plain C deterministic Sobol backend for normal probabilities.
+\item \code{DeterministicQMC(maxpts = 25000, backend = "hybrid")}: an
+experimental Sobol backend with a deterministic tail-spaced change of
+variables.
+\item \code{DeterministicQMC(maxpts = 25000, backend = "genzsobol")}: an
+experimental Sobol backend with variable reordering and embedded stability
+stopping.
+\item \code{DeterministicQMC(maxpts = 50000, backend = "auto")}: the
+automatic deterministic policy, using cross-checked Genz-Sobol when supported
+and deterministic FORTRAN otherwise.
+\end{itemize}
+
+The ``original randomized QMC'' row is included separately from the default
+because the default may stop early once its tolerance is met.  The fixed-budget
+row is often the cleaner comparison to \code{DeterministicQMC} because both are
+asked to spend the same nominal number of points.  The Auto row is deliberately
+given a larger budget because it splits the work across deterministic
+cross-checks; this is a benchmark setting for \code{abseps = 1e-5}, not a
+proposed package default.
+
+\section{Benchmark design}
+
+The examples below use equicorrelated-by-distance Toeplitz correlation
+matrices, semi-infinite lower bounds, and finite upper bounds.  The dimensions
+are deliberately modest so that package checks remain fast and so that the
+\code{Miwa} comparison is still available.  Accuracy is measured as relative
+error against a higher-step \code{Miwa(steps = 512)} calculation, to five
+significant digits.  This reference is not a proof of the exact probability; it
+is a stable deterministic yardstick for this small benchmark.
+
+Each reported time is the median elapsed time over three evaluations on the
+machine building the vignette.  Stochastic methods are run with a fixed seed so
+that the values in the table are reproducible, although the timing itself is
+necessarily machine dependent.
+
+<<benchmark, echo=TRUE>>=
+make_problem <- function(n) {
+    list(corr = toeplitz(0.35^(0:(n - 1))),
+         lower = rep(-Inf, n),
+         upper = seq(-0.2, 0.6, length.out = n))
+}
+
+methods <- list(
+    list(name = "Default GenzBretz",
+         algorithm = GenzBretz(),
+         seed = 11L),
+    list(name = "Miwa steps=128",
+         algorithm = Miwa(steps = 128),
+         seed = NULL),
+    list(name = "Original randomized QMC",
+         algorithm = GenzBretz(maxpts = 25000, abseps = 0, releps = 0),
+         seed = 11L),
+    list(name = "DeterministicQMC C",
+         algorithm = DeterministicQMC(maxpts = 25000, abseps = 0,
+                                      releps = 0, backend = "c"),
+         seed = NULL),
+    list(name = "DeterministicQMC Sobol",
+         algorithm = DeterministicQMC(maxpts = 25000, abseps = 0,
+                                      releps = 0, backend = "sobol"),
+         seed = NULL),
+    list(name = "DeterministicQMC Hybrid",
+         algorithm = DeterministicQMC(maxpts = 25000, abseps = 0,
+                                      releps = 0, backend = "hybrid"),
+         seed = NULL),
+    list(name = "DeterministicQMC GenzSobol",
+         algorithm = DeterministicQMC(maxpts = 25000, abseps = 1e-5,
+                                      releps = 0, backend = "genzsobol"),
+         seed = NULL),
+    list(name = "DeterministicQMC Auto",
+         algorithm = DeterministicQMC(maxpts = 50000, abseps = 1e-5,
+                                      releps = 0, backend = "auto"),
+         seed = NULL)
+)
+
+timed_value <- function(problem, method, reps = 3L) {
+    times <- numeric(reps)
+    value <- NA_real_
+    diagnostic <- NA_real_
+    target_requested <- is.list(method$algorithm) &&
+        ((length(method$algorithm$abseps) == 1L &&
+          !is.na(method$algorithm$abseps) && method$algorithm$abseps > 0) ||
+         (length(method$algorithm$releps) == 1L &&
+          !is.na(method$algorithm$releps) && method$algorithm$releps > 0))
+    target_status <- "not requested"
+    for (i in seq_len(reps)) {
+        if (!is.null(method$seed))
+            set.seed(method$seed)
+        invisible(gc(FALSE))
+        tm <- system.time({
+            ans <- pmvnorm(lower = problem$lower, upper = problem$upper,
+                           corr = problem$corr,
+                           algorithm = method$algorithm)
+        })
+        times[i] <- unname(tm["elapsed"])
+        if (i == 1L) {
+            value <- as.numeric(ans)
+            diagnostic <- attr(ans, "error")
+            if (target_requested)
+                target_status <- if (identical(attr(ans, "msg"),
+                                               "Normal Completion"))
+                    "met" else "not met"
+        }
+    }
+    list(value = value, diagnostic = diagnostic,
+         target_status = target_status, elapsed = median(times))
+}
+
+benchmark_dimension <- function(n) {
+    problem <- make_problem(n)
+    reference <- as.numeric(pmvnorm(lower = problem$lower,
+                                    upper = problem$upper,
+                                    corr = problem$corr,
+                                    algorithm = Miwa(steps = 512)))
+    rows <- lapply(methods, function(method) {
+        ans <- timed_value(problem, method)
+        data.frame(dimension = n,
+                   method = method$name,
+                   elapsed_sec = sprintf("%.4f", ans$elapsed),
+                   value = sprintf("%.8g", ans$value),
+                   diagnostic = sprintf("%.3e", ans$diagnostic),
+                   target_status = ans$target_status,
+                   rel_error = sprintf("%.5g",
+                       if (reference == 0) NA_real_ else
+                           abs(ans$value - reference) / abs(reference)),
+                   stringsAsFactors = FALSE)
+    })
+    do.call(rbind, rows)
+}
+
+results <- do.call(rbind, lapply(c(4L, 8L, 12L), benchmark_dimension))
+print(results, row.names = FALSE)
+@
+
+\section{Reading the results}
+
+The default \code{GenzBretz()} row answers the practical question ``what happens
+if I use \pkg{mvtnorm} as shipped?''  The fixed-budget QMC row answers a
+different question: ``what does the original randomized QMC path do if it is
+given the same nominal point budget as the deterministic C backend?''
+
+For low dimensions, \code{Miwa} is often competitive and accurate.  Its
+disadvantage is structural rather than visible in every small table: it is a
+grid-based deterministic method and is limited to normal probabilities in
+dimension at most 20.  Increasing the number of grid steps can improve accuracy
+but increases cost.
+
+\code{DeterministicQMC} is intended to occupy a different part of the design
+space.  It gives a deterministic QMC-style calculation under \code{maxpts}
+control.  This is useful when repeated evaluations must agree bit for bit
+without managing seeds.  The Halton row is the simple first C backend.  The
+Sobol row tests the first stronger deterministic point set in the same
+transformed integral.  The Hybrid row keeps the Sobol backbone but applies a
+deterministic tail-spaced warp with a Jacobian correction.  The trade-off is
+that the C backends do not provide the mature randomized error assessment or
+all adaptive refinements of \code{GenzBretz}.  Therefore the benchmark should be
+read as an implementation baseline, not as a claim that the first C backends are
+already uniformly faster than the stochastic default.  The GenzSobol row is
+allowed to use its deterministic embedded stopping rule, so it answers a
+slightly different speed question than the fixed-budget C, Sobol, and Hybrid
+rows.  The Auto row adds deterministic cross-checks at fixed sequence offsets
+and reports the larger of the embedded Genz-Sobol stability errors and the
+between-check spread.  When a tolerance is requested, those individual checks
+use a tighter internal target before the combined diagnostic is compared with
+the requested \code{abseps}/\code{releps}.  It is therefore the closest row to
+the unattended best-practice deterministic policy: somewhat more work is
+acceptable in exchange for a more conservative reproducible accuracy
+diagnostic.  The larger Auto budget in this benchmark compensates for those
+repeated cross-checks; it should not be read as a change to the current package
+defaults.
+
+When \code{abseps} or \code{releps} is positive, \code{DeterministicQMC}
+treats it as a request that the reported deterministic diagnostic meet the
+requested target before \code{maxpts} is exhausted.  If the diagnostic is
+larger than the requested tolerance, the returned object has \code{inform = 1}
+and the usual message \code{"Completion with error > abseps"}.  In the table,
+\code{target\_status} records whether such a target was requested and met.
+This is a warning about the diagnostic, not a proof that the true integration
+error is above or below the target.
+
+\hypertarget{a-proposed-speed-target}{}
+\section{Sobol, hybrid, Genz-Sobol}
+
+The benchmark now includes three implementations of the proposed deterministic
+Genz-Sobol direction.  \code{backend = "sobol"} keeps the sequential Genz
+transformation and uses Sobol direction numbers with Gray-code point generation
+in plain C.  \code{backend = "hybrid"} applies a gentle deterministic
+tail-spaced change of variables to the Sobol coordinates, with the
+corresponding Jacobian correction.  That makes the nonuniform-grid idea
+testable without replacing QMC by a full tensor grid.
+\code{backend = "genzsobol"} adds marginal-width variable reordering and
+embedded powers-of-two stability checks using \code{abseps} and
+\code{releps}.  \code{backend = "auto"} wraps that Genz-Sobol backend in a
+deterministic selection policy: supported normal problems use several fixed
+sequence offsets and unsupported cases use deterministic FORTRAN rather than
+falling back to randomized QMC.
+
+The remaining target is not just ``use Sobol'' or ``warp the tails''; it is to
+add the surrounding algorithmic pieces that make the randomized Genz-Bretz path
+so effective:
+
+\begin{itemize}
+\item keep the sequential Genz transformation and the same probability
+interface;
+\item reorder variables before integration to reduce effective dimension;
+\item use a small pilot pass to identify conditional tail regions or
+high-curvature coordinates before selecting any refinement grid;
+\item replace the present fixed sequence offsets with stronger deterministic
+digital shifts when a stability diagnostic is needed;
+\item use fixed deterministic shifts only as a reproducible stability check,
+not as randomization;
+\item keep the FORTRAN deterministic path as a reference and fallback.
+\end{itemize}
+
+The fully developed version would aim at the speed of \code{GenzBretz} by
+using fast point generation, embedded refinement, effective-dimension
+reduction, and selective tail-aware refinement.  It would aim at the accuracy
+of \code{GenzBretz} by retaining the Genz transformation and using a stronger
+low-discrepancy rule than the current Halton prototype.  The important caveat
+is that the error attribute would still be deterministic: it could measure
+convergence and stability across fixed blocks, but it would not be a Monte
+Carlo confidence statement.
+
+\section{Accuracy caveats}
+
+There are two different notions of uncertainty in this comparison.  The
+\code{GenzBretz} error attribute is tied to randomized integration.  The
+\code{DeterministicQMC} error attribute is a deterministic block-stability
+diagnostic.  These quantities can be numerically useful, but they are not the
+same statistical object.  For applications where stochastic error assessment is
+important, \code{GenzBretz} remains the conservative default.  For deterministic
+optimization, testing, or reproducible simulation pipelines, the new backend
+provides a stable alternative.
+
+Positive \code{abseps} and \code{releps} values request deterministic
+diagnostic error control only.  They do not provide a Monte Carlo confidence
+interval and they do not prove a rigorous deterministic error bound.
+
+\bibliographystyle{jss}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "mvtnorm"))}}
+
+\end{document}

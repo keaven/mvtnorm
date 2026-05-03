@@ -1,0 +1,70 @@
+# mvtnorm deterministic QMC branch
+
+`mvtnorm` computes multivariate normal and t probabilities, quantiles, random
+deviates, and densities. This repository is a development branch based on the
+CRAN mirror of `mvtnorm` and explores deterministic quasi-Monte Carlo (QMC)
+alternatives for multivariate normal probabilities.
+
+## Core package functions
+
+- `pmvnorm()`: multivariate normal probabilities.
+- `pmvt()`: multivariate t probabilities.
+- `qmvnorm()` and `qmvt()`: quantiles.
+- `dmvnorm()`, `rmvnorm()`, `dmvt()`, `rmvt()`: densities and random deviates.
+- `GenzBretz()`, `Miwa()`, `TVPACK()`: existing algorithm selectors.
+- `DeterministicQMC()`: new deterministic QMC algorithm selector on this
+  branch.
+
+## New deterministic algorithm selector
+
+`DeterministicQMC(maxpts = 25000, abseps = 0.001, releps = 0, backend = "auto")`
+adds reproducible deterministic integration paths. Available backends are:
+
+- `"auto"`: automatic deterministic policy.
+- `"c"`: plain C Halton backend for normal probabilities.
+- `"sobol"`: plain C Sobol backend for normal probabilities.
+- `"hybrid"`: Sobol backend with deterministic tail-spaced transformation.
+- `"genzsobol"`: Sobol backend with variable reordering and embedded stability
+  checks.
+- `"fortran"`: original FORTRAN path with deterministic shifts.
+- `"cpu"`: alias for `"c"`.
+- `"metal"`: probes for macOS Metal but currently falls back because no Metal
+  evaluator is implemented.
+
+For supported normal probabilities, `backend = "auto"` runs repeated
+Genz-Sobol checks at fixed deterministic sequence offsets and reports the
+larger of embedded stability errors and between-check spread. Unsupported
+cases use the deterministic FORTRAN path.
+
+## Error diagnostics
+
+The deterministic `error` attribute is a reproducible stability diagnostic.
+Positive `abseps` and `releps` request that this diagnostic meet the requested
+target before `maxpts` is exhausted. These diagnostics are not Monte Carlo
+confidence intervals and not rigorous deterministic error bounds.
+
+## Important files
+
+- `R/mvt.R`: R algorithm selectors and deterministic backend dispatch.
+- `src/dqmc.c`: deterministic C QMC backends.
+- `src/C_FORTRAN_interface.c`: deterministic FORTRAN random-number hook and
+  Metal availability probe.
+- `src/mvtnorm-init.c`: native routine registration.
+- `man/algorithms.Rd`: algorithm help documentation.
+- `vignettes/articles/dqmc-methods.Rmd`: methodology article.
+- `vignettes/articles/dqmc-benchmark.Rmd`: speed and relative-error benchmark.
+- `vignettes/DeterministicQMC-methods.Rnw`: Sweave methodology vignette.
+- `vignettes/DeterministicQMC-benchmark.Rnw`: Sweave benchmark vignette.
+- `tests/regtest-DeterministicQMC.R`: deterministic QMC regression tests.
+- `docs/`: pkgdown site.
+
+## Suggested local validation
+
+```sh
+R CMD INSTALL -l /tmp/mvtnorm-lib .
+R_LIBS=/tmp/mvtnorm-lib Rscript tests/regtest-DeterministicQMC.R
+R CMD check --no-manual --no-build-vignettes -o /tmp/mvtnorm-check .
+```
+
+The pkgdown site also generates a more complete function index at
+`docs/llms.txt`.

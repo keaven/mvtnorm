@@ -1,0 +1,15 @@
+url: http://mvtnorm.R-forge.R-project.org
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [reference, articles]
+
+articles:
+- title: Deterministic QMC
+  navbar: Deterministic QMC
+  contents:
+  - articles/dqmc-methods
+  - articles/dqmc-benchmark

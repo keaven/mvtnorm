@@ -22,6 +22,21 @@ void C_mvtdst(int *n, int *nu, double *lower, double *upper,
 
 }
 
+void C_mvtdst_dqmc(int *n, int *nu, double *lower, double *upper,
+                   int *infin, double *corr, double *delta,
+                   int *maxpts, double *abseps, double *releps,
+                   double *error, double *value, int *inform, int *start)
+{
+    unsigned int start_value = (start[0] < 0) ? 0u : (unsigned int) start[0];
+
+    mvtnorm_set_dqmc(1, start_value);
+    F77_CALL(mvtdst)(n, nu, lower, upper,
+                     infin, corr, delta,
+                     maxpts, abseps, releps,
+                     error, value, inform);
+    mvtnorm_set_dqmc(0, 0u);
+}
+
 // TVPACK n=3
 void C_tvtlr(int *NU, double *H, double *R, double *EPSI, double *TVTL) {
 
@@ -40,6 +55,10 @@ static const R_CMethodDef cMethods[] = {
                                            INTSXP, REALSXP, REALSXP, 
                                            INTSXP, REALSXP, REALSXP, 
                                            REALSXP, REALSXP, INTSXP, INTSXP}}, 
+    {"C_mvtdst_dqmc", (DL_FUNC) &C_mvtdst_dqmc, 14, (R_NativePrimitiveArgType[14]){INTSXP, INTSXP, REALSXP, REALSXP,
+                                           INTSXP, REALSXP, REALSXP,
+                                           INTSXP, REALSXP, REALSXP,
+                                           REALSXP, REALSXP, INTSXP, INTSXP}},
     {"C_tvtlr", (DL_FUNC) &C_tvtlr, 5, (R_NativePrimitiveArgType[13]){INTSXP, REALSXP, REALSXP, REALSXP, REALSXP}},
     {"C_bvtlr", (DL_FUNC) &C_bvtlr, 5, (R_NativePrimitiveArgType[13]){INTSXP, REALSXP, REALSXP, REALSXP, REALSXP}},
     {NULL, NULL, 0, NULL}
@@ -47,6 +66,11 @@ static const R_CMethodDef cMethods[] = {
 
 static const R_CallMethodDef callMethods[] = {
     {"R_miwa", (DL_FUNC) &R_miwa, 5},
+    {"R_dqmc_metal_available", (DL_FUNC) &R_dqmc_metal_available, 0},
+    {"R_dqmc_mvn", (DL_FUNC) &R_dqmc_mvn, 7},
+    {"R_dqmc_mvn_sobol", (DL_FUNC) &R_dqmc_mvn_sobol, 7},
+    {"R_dqmc_mvn_hybrid", (DL_FUNC) &R_dqmc_mvn_hybrid, 7},
+    {"R_dqmc_mvn_genzsobol", (DL_FUNC) &R_dqmc_mvn_genzsobol, 9},
     {"R_ltMatrices_solve", (DL_FUNC) &R_ltMatrices_solve, 6},
     {"R_ltMatrices_solve_C", (DL_FUNC) &R_ltMatrices_solve_C, 5},
     {"R_ltMatrices_logdet", (DL_FUNC) &R_ltMatrices_logdet, 5},
@@ -67,7 +91,12 @@ void attribute_visible R_init_mvtnorm(DllInfo *dll)
     R_useDynamicSymbols(dll, FALSE);
     R_forceSymbols(dll, TRUE);
     R_RegisterCCallable("mvtnorm", "C_mvtdst", (DL_FUNC) &C_mvtdst);
+    R_RegisterCCallable("mvtnorm", "C_mvtdst_dqmc", (DL_FUNC) &C_mvtdst_dqmc);
     R_RegisterCCallable("mvtnorm", "R_miwa", (DL_FUNC) &R_miwa);
+    R_RegisterCCallable("mvtnorm", "R_dqmc_mvn", (DL_FUNC) &R_dqmc_mvn);
+    R_RegisterCCallable("mvtnorm", "R_dqmc_mvn_sobol", (DL_FUNC) &R_dqmc_mvn_sobol);
+    R_RegisterCCallable("mvtnorm", "R_dqmc_mvn_hybrid", (DL_FUNC) &R_dqmc_mvn_hybrid);
+    R_RegisterCCallable("mvtnorm", "R_dqmc_mvn_genzsobol", (DL_FUNC) &R_dqmc_mvn_genzsobol);
     R_RegisterCCallable("mvtnorm", "R_ltMatrices_solve", (DL_FUNC) &R_ltMatrices_solve);
     R_RegisterCCallable("mvtnorm", "R_ltMatrices_solve_C", (DL_FUNC) &R_ltMatrices_solve_C);
     R_RegisterCCallable("mvtnorm", "R_ltMatrices_logdet", (DL_FUNC) &R_ltMatrices_logdet);
