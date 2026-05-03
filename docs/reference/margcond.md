@@ -15,13 +15,13 @@ cond_mvnorm(chol, invchol, which_given = 1L, given, center = FALSE)
 - chol:
 
   Cholesky factors of covariance matrices as
-  [`ltMatrices`](http://mvtnorm.R-forge.R-project.org/reference/ltMatrices.md)
+  [`ltMatrices`](https://keaven.github.io/mvtnorm/reference/ltMatrices.md)
   object, length is recylced to length of `lower` and `upper`.
 
 - invchol:
 
   Cholesky factors of precision matrices as
-  [`ltMatrices`](http://mvtnorm.R-forge.R-project.org/reference/ltMatrices.md)
+  [`ltMatrices`](https://keaven.github.io/mvtnorm/reference/ltMatrices.md)
   object, length is recylced to length of `lower` and `upper`. Either
   `chol` or `invchol` must be given.
 
@@ -44,7 +44,7 @@ cond_mvnorm(chol, invchol, which_given = 1L, given, center = FALSE)
 
   logical, if `TRUE`, the negative rescaled conditional mean is returned
   (such that it can be specified as `center` argument to
-  [`slpmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/lpmvnorm.md)).
+  [`slpmvnorm`](https://keaven.github.io/mvtnorm/reference/lpmvnorm.md)).
   By default, the conditional mean is returned.
 
 ## Details

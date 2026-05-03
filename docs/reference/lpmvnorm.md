@@ -52,13 +52,13 @@ sldpmvnorm(obs, lower, upper, mean, invcholmean, chol, invchol, logLik = TRUE, .
 - chol:
 
   Cholesky factors of covariance matrices as
-  [`ltMatrices`](http://mvtnorm.R-forge.R-project.org/reference/ltMatrices.md)
+  [`ltMatrices`](https://keaven.github.io/mvtnorm/reference/ltMatrices.md)
   object, length is recylced to length of `obs`, `lower` and `upper`.
 
 - invchol:
 
   Cholesky factors of precision matrices as
-  [`ltMatrices`](http://mvtnorm.R-forge.R-project.org/reference/ltMatrices.md)
+  [`ltMatrices`](https://keaven.github.io/mvtnorm/reference/ltMatrices.md)
   object, length is recylced to length of `lower` and `upper`. Either
   `chol` or `invchol` must be given.
 
@@ -113,7 +113,7 @@ quasi-Monte-Carlo mvtnorm::Genz_Bretz_2002 integration is implemented,
 the latter with weights obtained, for example, from packages qrng or
 randtoolbox. It is the responsibility of the user to ensure a meaningful
 lattice is used. In case of doubt, use plain Monte-Carlo (`w = NULL`) or
-[`pmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/pmvnorm.md).
+[`pmvnorm`](https://keaven.github.io/mvtnorm/reference/pmvnorm.md).
 
 `slpmvnorm` computes both the individual log-likelihood contributions
 and the corresponding score matrix (of dimension \\J \times (J + 1) / 2
@@ -134,7 +134,7 @@ log-likelihood contributions as well as scores for `obs`, `lower`,
 
 ## See also
 
-[`dmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.md),
+[`dmvnorm`](https://keaven.github.io/mvtnorm/reference/Mvnorm.md),
 [`vignette("lmvnorm_src", package = "mvtnorm")`](https://cran.rstudio.com/web/packages/mvtnorm/vignettes/lmvnorm_src.pdf)
 
 ## References

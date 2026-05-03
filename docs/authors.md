@@ -25,6 +25,9 @@
 
 ## Citation
 
+Source:
+[`inst/CITATION`](https://github.com/keaven/mvtnorm/blob/HEAD/inst/CITATION)
+
 Genz A, Bretz F (2009). *Computation of Multivariate Normal and t
 Probabilities*, series Lecture Notes in Statistics. Springer-Verlag,
 Heidelberg. ISBN 978-3-642-01688-2.

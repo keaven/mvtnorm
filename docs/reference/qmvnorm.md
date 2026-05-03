@@ -2,7 +2,7 @@
 
 Computes the equicoordinate quantile function of the multivariate normal
 distribution for arbitrary correlation matrices based on inversion of
-[`pmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/pmvnorm.md),
+[`pmvnorm`](https://keaven.github.io/mvtnorm/reference/pmvnorm.md),
 using a stochastic root finding algorithm described in Bornkamp (2018).
 
 ## Usage
@@ -51,10 +51,9 @@ qmvnorm(p, interval = NULL, tail = c("lower.tail", "upper.tail", "both.tails"),
 - algorithm:
 
   an object of class
-  [`GenzBretz`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md),
-  [`Miwa`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
-  or
-  [`TVPACK`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`GenzBretz`](https://keaven.github.io/mvtnorm/reference/algorithms.md),
+  [`Miwa`](https://keaven.github.io/mvtnorm/reference/algorithms.md) or
+  [`TVPACK`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   specifying both the algorithm to be used as well as the associated
   hyper parameters.
 
@@ -74,7 +73,7 @@ qmvnorm(p, interval = NULL, tail = c("lower.tail", "upper.tail", "both.tails"),
 - ...:
 
   additional parameters to be passed to
-  [`GenzBretz`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md).
+  [`GenzBretz`](https://keaven.github.io/mvtnorm/reference/algorithms.md).
 
 ## Details
 
@@ -94,8 +93,8 @@ function evaluated at the quantile and `p`.
 
 ## See also
 
-[`pmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/pmvnorm.md),
-[`qmvt`](http://mvtnorm.R-forge.R-project.org/reference/qmvt.md)
+[`pmvnorm`](https://keaven.github.io/mvtnorm/reference/pmvnorm.md),
+[`qmvt`](https://keaven.github.io/mvtnorm/reference/qmvt.md)
 
 ## Examples
 

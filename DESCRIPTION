@@ -20,11 +20,15 @@ Description: Computes multivariate normal and t probabilities, quantiles, random
   and corresponding methods are part of this package.
 Imports: stats
 Depends: R(>= 3.5.0)
-Suggests: qrng, numDeriv, bibtex
+Suggests: qrng, numDeriv, bibtex, testthat (>= 3.0.0), covr, knitr,
+        rmarkdown
 License: GPL-2
-URL: http://mvtnorm.R-forge.R-project.org
+URL: https://keaven.github.io/mvtnorm/,
+        https://github.com/keaven/mvtnorm,
+        http://mvtnorm.R-forge.R-project.org
+BugReports: https://github.com/keaven/mvtnorm/issues
 NeedsCompilation: yes
-Packaged: 2026-04-14 15:00:23 UTC; hothorn
+Config/testthat/edition: 3
 Author: Alan Genz [aut],
   Frank Bretz [aut],
   Tetsuhisa Miwa [aut],
@@ -36,5 +40,3 @@ Author: Alan Genz [aut],
   Torsten Hothorn [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-8301-0471>)
 Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
-Repository: CRAN
-Date/Publication: 2026-04-15 07:10:13 UTC

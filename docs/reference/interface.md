@@ -108,9 +108,9 @@ lLgrad(object, obs, lower, upper, standardize = FALSE, ...)
 - ...:
 
   Additional arguments to
-  [`ldpmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/lpmvnorm.md)
+  [`ldpmvnorm`](https://keaven.github.io/mvtnorm/reference/lpmvnorm.md)
   and
-  [`sldpmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/lpmvnorm.md)
+  [`sldpmvnorm`](https://keaven.github.io/mvtnorm/reference/lpmvnorm.md)
 
 ## Details
 

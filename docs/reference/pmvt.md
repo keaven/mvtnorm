@@ -47,9 +47,9 @@ pmvt(lower=-Inf, upper=Inf, delta=rep(0, length(lower)),
 - algorithm:
 
   an object of class
-  [`GenzBretz`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`GenzBretz`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   or
-  [`TVPACK`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`TVPACK`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   defining the hyper parameters of this algorithm.
 
 - type:
@@ -96,7 +96,7 @@ Because of the randomization, the result for this algorithm (slightly)
 depends on [`.Random.seed`](https://rdrr.io/r/base/Random.html).
 
 For 2- and 3-dimensional problems one can also use the
-[`TVPACK`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+[`TVPACK`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 routines described by mvtnorm::Genz:2004, which only handles
 semi-infinite integration regions (and for `type = "Kshirsagar"` only
 central problems).
@@ -163,7 +163,7 @@ with attributes
 
 ## See also
 
-[`qmvt`](http://mvtnorm.R-forge.R-project.org/reference/qmvt.md)
+[`qmvt`](https://keaven.github.io/mvtnorm/reference/qmvt.md)
 
 ## Examples
 

@@ -40,10 +40,9 @@ pmvnorm(lower=-Inf, upper=Inf, mean=rep(0, length(lower)),
 - algorithm:
 
   an object of class
-  [`GenzBretz`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md),
-  [`Miwa`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
-  or
-  [`TVPACK`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`GenzBretz`](https://keaven.github.io/mvtnorm/reference/algorithms.md),
+  [`Miwa`](https://keaven.github.io/mvtnorm/reference/algorithms.md) or
+  [`TVPACK`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   specifying both the algorithm to be used as well as the associated
   hyper parameters.
 
@@ -62,7 +61,7 @@ pmvnorm(lower=-Inf, upper=Inf, mean=rep(0, length(lower)),
 - ...:
 
   additional parameters (currently given to
-  [`GenzBretz`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`GenzBretz`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   for backward compatibility issues).
 
 ## Details
@@ -81,24 +80,23 @@ Note the default algorithm GenzBretz is randomized and hence slightly
 depends on [`.Random.seed`](https://rdrr.io/r/base/Random.html) and that
 both `-Inf` and `+Inf` may be specified in `lower` and `upper`. For more
 details see
-[`pmvt`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md).
+[`pmvt`](https://keaven.github.io/mvtnorm/reference/pmvt.md).
 
 The multivariate normal case is treated as a special case of
-[`pmvt`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md) with
-`df=0` and univariate problems are passed to
+[`pmvt`](https://keaven.github.io/mvtnorm/reference/pmvt.md) with `df=0`
+and univariate problems are passed to
 [`pnorm`](https://rdrr.io/r/stats/Normal.html).
 
 The multivariate normal density and random deviates are available using
-[`dmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.md)
-and
-[`rmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.md).
+[`dmvnorm`](https://keaven.github.io/mvtnorm/reference/Mvnorm.md) and
+[`rmvnorm`](https://keaven.github.io/mvtnorm/reference/Mvnorm.md).
 
 `pmvnorm` is based on original implementations by Alan Genz, Frank
 Bretz, and Tetsuhisa Miwa developed for computing accurate
 approximations to the normal integral. Users interested in computing
 log-likelihoods involving such normal probabilities should consider
 function
-[`lpmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/lpmvnorm.md),
+[`lpmvnorm`](https://keaven.github.io/mvtnorm/reference/lpmvnorm.md),
 which is more flexible and efficient for this task and comes with the
 ability to evaluate score functions.
 
@@ -128,10 +126,10 @@ with attributes
 
 ## See also
 
-[`qmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/qmvnorm.md)
-for quantiles and
-[`lpmvnorm`](http://mvtnorm.R-forge.R-project.org/reference/lpmvnorm.md)
-for log-likelihoods.
+[`qmvnorm`](https://keaven.github.io/mvtnorm/reference/qmvnorm.md) for
+quantiles and
+[`lpmvnorm`](https://keaven.github.io/mvtnorm/reference/lpmvnorm.md) for
+log-likelihoods.
 
 ## Examples
 

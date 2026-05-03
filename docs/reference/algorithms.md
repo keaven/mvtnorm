@@ -63,8 +63,8 @@ TVPACK(abseps = 1e-6)
 
   logical indicating if a check for singularity of the correlation
   matrix should be performed (once per function call to
-  [`pmvt()`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md) or
-  [`pmvnorm()`](http://mvtnorm.R-forge.R-project.org/reference/pmvnorm.md)).
+  [`pmvt()`](https://keaven.github.io/mvtnorm/reference/pmvt.md) or
+  [`pmvnorm()`](https://keaven.github.io/mvtnorm/reference/pmvnorm.md)).
 
 - maxval:
 

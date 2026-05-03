@@ -26,6 +26,7 @@
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/mvtnorm/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -35,7 +36,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-
+      <small>Source: <a href="https://github.com/keaven/mvtnorm/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -55,6 +56,12 @@
 </li>
 </ul></li>
 <li>Added generated deterministic QMC vignette artifacts under <code>inst/doc/</code>.</li>
+<li>Added development tooling for the fork:
+<ul><li>GitHub Actions <code>R CMD check</code> across Linux, macOS, Windows, and multiple R versions.</li>
+<li>A pkgdown build workflow with GitHub Pages deployment on default branches.</li>
+<li>A coverage workflow using <code>covr</code>.</li>
+<li>An incremental <code>testthat</code> edition 3 test suite for new deterministic QMC behavior while retaining the existing regression tests.</li>
+</ul></li>
 </ul></div>
 <div class="section level4">
 <h4 id="notes-1-3-7-9000">Notes<a class="anchor" aria-label="anchor" href="#notes-1-3-7-9000"></a></h4>

@@ -9,7 +9,7 @@ keeping the original FORTRAN/C algorithms as reference implementations.
 - Branch: `Deterministic-QMC-algorithm`
 - Upstream remote: `https://github.com/cran/mvtnorm.git`
 - Primary new user API:
-  [`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 - Main R implementation file: `R/mvt.R`
 - Main C implementation file: `src/dqmc.c`
 - Native registration files:
@@ -47,7 +47,7 @@ keeping the original FORTRAN/C algorithms as reference implementations.
 
 Use careful wording for deterministic error control. `abseps` and
 `releps` request reproducible stability diagnostics for
-[`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md).
+[`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md).
 They are not stochastic confidence intervals and not rigorous
 deterministic error bounds.
 

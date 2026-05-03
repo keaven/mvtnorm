@@ -59,8 +59,8 @@ dmvt(x, delta = rep(0, p), sigma = diag(p), df = 1, log = TRUE,
   posterior distribution for the regression coefficients in a linear
   regression. In the central case both types coincide. Note that the
   defaults differ from the default in
-  [`pmvt()`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md)
-  (for reasons of backward compatibility).
+  [`pmvt()`](https://keaven.github.io/mvtnorm/reference/pmvt.md) (for
+  reasons of backward compatibility).
 
 - checkSymmetry:
 
@@ -72,7 +72,7 @@ dmvt(x, delta = rep(0, p), sigma = diag(p), df = 1, log = TRUE,
 - ...:
 
   additional arguments to
-  [`rmvnorm()`](http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.md),
+  [`rmvnorm()`](https://keaven.github.io/mvtnorm/reference/Mvnorm.md),
   for example `method`.
 
 ## Details
@@ -102,8 +102,8 @@ multivariate normal distribution. This is (now) also allowed for
 `rmvt()` and `dmvt()`.
 
 Note that `dmvt()` has default `log = TRUE`, whereas
-[`dmvnorm()`](http://mvtnorm.R-forge.R-project.org/reference/Mvnorm.md)
-has default `log = FALSE`.
+[`dmvnorm()`](https://keaven.github.io/mvtnorm/reference/Mvnorm.md) has
+default `log = FALSE`.
 
 ## References
 
@@ -111,8 +111,8 @@ has default `log = FALSE`.
 
 ## See also
 
-[`pmvt()`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md) and
-[`qmvt()`](http://mvtnorm.R-forge.R-project.org/reference/qmvt.md)
+[`pmvt()`](https://keaven.github.io/mvtnorm/reference/pmvt.md) and
+[`qmvt()`](https://keaven.github.io/mvtnorm/reference/qmvt.md)
 
 ## Examples
 

@@ -22,6 +22,13 @@ package's historical CRAN release notes remain in `inst/NEWS.Rd`.
   - `vignettes/articles/dqmc-benchmark.Rmd`
   - matching Sweave vignettes under `vignettes/`
 - Added generated deterministic QMC vignette artifacts under `inst/doc/`.
+- Added development tooling for the fork:
+  - GitHub Actions `R CMD check` across Linux, macOS, Windows, and multiple
+    R versions.
+  - A pkgdown build workflow with GitHub Pages deployment on default branches.
+  - A coverage workflow using `covr`.
+  - An incremental `testthat` edition 3 test suite for new deterministic QMC
+    behavior while retaining the existing regression tests.
 
 ### Notes
 

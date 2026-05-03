@@ -2,24 +2,24 @@
 
 ## The computational problem
 
-[`pmvnorm()`](http://mvtnorm.R-forge.R-project.org/reference/pmvnorm.md)
-and [`pmvt()`](http://mvtnorm.R-forge.R-project.org/reference/pmvt.md)
-evaluate probabilities over rectangular regions for multivariate normal
-and Student t distributions. After standardisation, the problem is an
+[`pmvnorm()`](https://keaven.github.io/mvtnorm/reference/pmvnorm.md) and
+[`pmvt()`](https://keaven.github.io/mvtnorm/reference/pmvt.md) evaluate
+probabilities over rectangular regions for multivariate normal and
+Student t distributions. After standardisation, the problem is an
 integral over a unit cube or hyperrectangle whose dimension is the
 dimension of the distribution. Tensor-product quadrature becomes
 unattractive quickly, so `mvtnorm` uses specialised transformations and
 simulation or quasi-Monte Carlo rules.
 
 The default
-[`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+[`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 algorithm is randomized quasi-Monte Carlo. Its randomization is a
 feature: it makes repeated randomized shifts possible and therefore
 gives a practical stochastic error assessment while retaining the speed
 advantages of low-discrepancy integration points.
 
 The new
-[`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+[`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 option keeps the same broad Genz-style transformed integration
 viewpoint, but removes dependence on R’s random-number generator. The
 plain C backends implement normal probabilities with a Cholesky
@@ -39,10 +39,10 @@ Student t probabilities.
 
 | Algorithm | Main advantages | Main limitations |
 |----|----|----|
-| [`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md) | Mature default; fast randomized QMC; supports normal and t probabilities; randomized error assessment. | Repeated calls can differ unless the seed is controlled; stochastic noise can be awkward in deterministic optimization and regression tests. |
-| [`Miwa()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md) | Deterministic; often very accurate for low-dimensional normal probabilities; independent of RNG state. | Normal probabilities only; dimension limited to 20; grid cost grows quickly. |
+| [`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md) | Mature default; fast randomized QMC; supports normal and t probabilities; randomized error assessment. | Repeated calls can differ unless the seed is controlled; stochastic noise can be awkward in deterministic optimization and regression tests. |
+| [`Miwa()`](https://keaven.github.io/mvtnorm/reference/algorithms.md) | Deterministic; often very accurate for low-dimensional normal probabilities; independent of RNG state. | Normal probabilities only; dimension limited to 20; grid cost grows quickly. |
 | Fixed-budget original QMC | Uses the established randomized Genz-Bretz path with early stopping disabled, making the point budget explicit. | Still randomized; error assessment is tied to randomized replication; runtime depends directly on the chosen budget. |
-| [`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md) | Deterministic output without managing seeds; plain C Halton, Sobol, hybrid, and Genz-Sobol normal backends; FORTRAN reference/fallback remains available; uses `maxpts` budget control. | The C backends currently handle normal probabilities only; their error values are deterministic convergence diagnostics rather than randomized confidence statements. |
+| [`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md) | Deterministic output without managing seeds; plain C Halton, Sobol, hybrid, and Genz-Sobol normal backends; FORTRAN reference/fallback remains available; uses `maxpts` budget control. | The C backends currently handle normal probabilities only; their error values are deterministic convergence diagnostics rather than randomized confidence statements. |
 
 ## What is new and useful
 
@@ -74,8 +74,8 @@ It adds a second deterministic route through the existing `mvtnorm` API:
   implemented.
 
 The main advantage over the previous deterministic option,
-[`Miwa()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md),
-is not a claim of universal accuracy. The advantage is architectural:
+[`Miwa()`](https://keaven.github.io/mvtnorm/reference/algorithms.md), is
+not a claim of universal accuracy. The advantage is architectural:
 deterministic QMC scales by a point budget (`maxpts`) rather than by a
 low-dimensional grid. That makes it more natural for deterministic
 optimization, reproducible simulation studies, and regression tests
@@ -281,7 +281,7 @@ tolerance. The remaining speed-and-accuracy target is to add:
 
 The Sobol backend does not have the same randomized error interpretation
 as
-[`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md),
+[`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md),
 because that interpretation comes from randomization. Its goal is
 instead comparable numerical accuracy with deterministic output. This is
 plausible because it uses the same Genz-style conditioning strategy and
@@ -324,7 +324,7 @@ DeterministicQMC(maxpts = 100000, abseps = 1e-6, releps = 0,
     ## [1] "DeterministicQMC" "GenzBretz"
 
 For
-[`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md),
+[`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md),
 this is a deterministic stability target. If the reported diagnostic is
 larger than the requested absolute or relative tolerance after the
 available `maxpts` budget is spent, the result is returned with
@@ -335,7 +335,7 @@ target.
 
 The warning is that this diagnostic is not the same object as the
 randomized Monte Carlo error reported by
-[`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md).
+[`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md).
 It is not a confidence interval, and it is not a rigorous deterministic
 error bound. It should be read as a reproducible convergence and
 stability check.
@@ -343,11 +343,11 @@ stability check.
 ## Practical interpretation
 
 Use
-[`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+[`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 for general-purpose production calculations where the mature randomized
 algorithm and stochastic error assessment are desired. Use
-[`Miwa()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
-as a low-dimensional deterministic normal-probability check. Use
-[`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+[`Miwa()`](https://keaven.github.io/mvtnorm/reference/algorithms.md) as
+a low-dimensional deterministic normal-probability check. Use
+[`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 when reproducibility of the numerical path is more important than
 stochastic error assessment.

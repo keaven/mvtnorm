@@ -8,9 +8,9 @@ package’s historical CRAN release notes remain in `inst/NEWS.Rd`.
 #### New
 
 - Added
-  [`DeterministicQMC()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   as a reproducible alternative to randomized
-  [`GenzBretz()`](http://mvtnorm.R-forge.R-project.org/reference/algorithms.md)
+  [`GenzBretz()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
   integration.
 - Added deterministic C backends for multivariate normal probabilities:
   `backend = "c"`, `"sobol"`, `"hybrid"`, and `"genzsobol"`.
@@ -28,6 +28,14 @@ package’s historical CRAN release notes remain in `inst/NEWS.Rd`.
   - matching Sweave vignettes under `vignettes/`
 - Added generated deterministic QMC vignette artifacts under
   `inst/doc/`.
+- Added development tooling for the fork:
+  - GitHub Actions `R CMD check` across Linux, macOS, Windows, and
+    multiple R versions.
+  - A pkgdown build workflow with GitHub Pages deployment on default
+    branches.
+  - A coverage workflow using `covr`.
+  - An incremental `testthat` edition 3 test suite for new deterministic
+    QMC behavior while retaining the existing regression tests.
 
 #### Notes
 
