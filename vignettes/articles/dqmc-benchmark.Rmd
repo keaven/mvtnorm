@@ -280,6 +280,12 @@ that the error attribute would still be deterministic: it could
 measure convergence and stability across fixed blocks, but it would not be a
 Monte Carlo confidence statement.
 
+For citation purposes, the Sobol-based rows should be tied to Sobol (1967) for
+the sequence, Caflisch (1998) or Glasserman (2004, Chapter 6) for QMC
+background, and the Genz/Genz-Bretz literature already cited by `mvtnorm` for
+the transformed multivariate normal and Student t probability algorithms. The
+corresponding BibTeX entries are in `inst/REFERENCES.bib`.
+
 ## Accuracy caveats
 
 There are two different notions of uncertainty in this comparison. The

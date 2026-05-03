@@ -1,4 +1,4 @@
-# mvtnorm 1.3-7.9000
+# mvtnorm 1.3-7-9001
 
 Development version for the `Deterministic-QMC-algorithm` branch. The
 package's historical CRAN release notes remain in `inst/NEWS.Rd`.
@@ -29,6 +29,8 @@ package's historical CRAN release notes remain in `inst/NEWS.Rd`.
   - A coverage workflow using `covr`.
   - An incremental `testthat` edition 3 test suite for new deterministic QMC
     behavior while retaining the existing regression tests.
+- Added Sobol, quasi-Monte Carlo, and Genz integration references for the new
+  deterministic QMC backends.
 
 ### Notes
 

@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mvtnorm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7-9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -293,7 +293,7 @@ rel error
 Default GenzBretz
 </td>
 <td style="text-align:right;">
-0.0000
+0.0010
 </td>
 <td style="text-align:right;">
 0.16701894
@@ -500,7 +500,7 @@ met
 Miwa steps=128
 </td>
 <td style="text-align:right;">
-0.0020
+0.0030
 </td>
 <td style="text-align:right;">
 0.03639772
@@ -523,7 +523,7 @@ not requested
 Original randomized QMC
 </td>
 <td style="text-align:right;">
-0.0050
+0.0060
 </td>
 <td style="text-align:right;">
 0.036109084
@@ -569,7 +569,7 @@ not requested
 DeterministicQMC Sobol
 </td>
 <td style="text-align:right;">
-0.0100
+0.0090
 </td>
 <td style="text-align:right;">
 0.036102446
@@ -592,7 +592,7 @@ not requested
 DeterministicQMC Hybrid
 </td>
 <td style="text-align:right;">
-0.0090
+0.0100
 </td>
 <td style="text-align:right;">
 0.036092146
@@ -684,7 +684,7 @@ met
 Miwa steps=128
 </td>
 <td style="text-align:right;">
-0.1630
+0.1580
 </td>
 <td style="text-align:right;">
 0.008486779
@@ -753,7 +753,7 @@ not requested
 DeterministicQMC Sobol
 </td>
 <td style="text-align:right;">
-0.0140
+0.0150
 </td>
 <td style="text-align:right;">
 0.0077452405
@@ -822,7 +822,7 @@ met
 DeterministicQMC Auto
 </td>
 <td style="text-align:right;">
-0.0130
+0.0120
 </td>
 <td style="text-align:right;">
 0.0077462859
@@ -928,6 +928,12 @@ rule than the current Halton prototype. The important caveat is that the
 error attribute would still be deterministic: it could measure
 convergence and stability across fixed blocks, but it would not be a
 Monte Carlo confidence statement.</p>
+<p>For citation purposes, the Sobol-based rows should be tied to Sobol
+(1967) for the sequence, Caflisch (1998) or Glasserman (2004, Chapter 6)
+for QMC background, and the Genz/Genz-Bretz literature already cited by
+<code>mvtnorm</code> for the transformed multivariate normal and Student
+t probability algorithms. The corresponding BibTeX entries are in
+<code>inst/REFERENCES.bib</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="accuracy-caveats">Accuracy caveats<a class="anchor" aria-label="anchor" href="#accuracy-caveats"></a>

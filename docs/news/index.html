@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mvtnorm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7-9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,10 +40,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3-7.9000" id="mvtnorm-13-79000">mvtnorm 1.3-7.9000<a class="anchor" aria-label="anchor" href="#mvtnorm-13-79000"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.3-7-9001" id="mvtnorm-13-7-9001">mvtnorm 1.3-7-9001<a class="anchor" aria-label="anchor" href="#mvtnorm-13-7-9001"></a></h2>
 <p>Development version for the <code>Deterministic-QMC-algorithm</code> branch. The package’s historical CRAN release notes remain in <code>inst/NEWS.Rd</code>.</p>
 <div class="section level4">
-<h4 id="new-1-3-7-9000">New<a class="anchor" aria-label="anchor" href="#new-1-3-7-9000"></a></h4>
+<h4 id="new-1-3-7-9001">New<a class="anchor" aria-label="anchor" href="#new-1-3-7-9001"></a></h4>
 <ul><li>Added <code><a href="../reference/algorithms.html">DeterministicQMC()</a></code> as a reproducible alternative to randomized <code><a href="../reference/algorithms.html">GenzBretz()</a></code> integration.</li>
 <li>Added deterministic C backends for multivariate normal probabilities: <code>backend = "c"</code>, <code>"sobol"</code>, <code>"hybrid"</code>, and <code>"genzsobol"</code>.</li>
 <li>Added <code>backend = "auto"</code> to select a deterministic policy without user intervention. Supported normal problems use cross-checked Genz-Sobol; unsupported cases use the deterministic FORTRAN path.</li>
@@ -62,9 +62,10 @@
 <li>A coverage workflow using <code>covr</code>.</li>
 <li>An incremental <code>testthat</code> edition 3 test suite for new deterministic QMC behavior while retaining the existing regression tests.</li>
 </ul></li>
+<li>Added Sobol, quasi-Monte Carlo, and Genz integration references for the new deterministic QMC backends.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="notes-1-3-7-9000">Notes<a class="anchor" aria-label="anchor" href="#notes-1-3-7-9000"></a></h4>
+<h4 id="notes-1-3-7-9001">Notes<a class="anchor" aria-label="anchor" href="#notes-1-3-7-9001"></a></h4>
 <ul><li>The deterministic <code>error</code> attribute is a reproducible stability diagnostic, not a Monte Carlo confidence interval and not a rigorous deterministic error bound.</li>
 <li>The current Sobol implementation uses an embedded plain C direction-number table rather than modern high-dimensional Joe-Kuo direction files.</li>
 <li>The <code>metal</code> backend currently probes for a macOS Metal device but falls back to C/FORTRAN because no Metal evaluator is implemented yet.</li>

@@ -81,6 +81,18 @@ low-dimensional grid. That makes it more natural for deterministic
 optimization, reproducible simulation studies, and regression tests
 where exact repeatability is important.
 
+For paper citations of the new deterministic Sobol and Genz-Sobol
+backends, a good citation trail is:
+
+- Sobol (1967) for the Sobol digital sequence;
+- Caflisch (1998) or Glasserman (2004, Chapter 6) for quasi-Monte Carlo
+  background, convergence motivation, and practical limitations;
+- Genz (1992), Genz and Bretz (2002, 2009), and the existing `mvtnorm`
+  references for the transformed multivariate normal and Student t
+  integration algorithms.
+
+The corresponding BibTeX entries are kept in `inst/REFERENCES.bib`.
+
 ``` r
 GenzBretz()
 ```
@@ -350,4 +362,6 @@ algorithm and stochastic error assessment are desired. Use
 a low-dimensional deterministic normal-probability check. Use
 [`DeterministicQMC()`](https://keaven.github.io/mvtnorm/reference/algorithms.md)
 when reproducibility of the numerical path is more important than
-stochastic error assessment.
+stochastic error assessment. The deterministic `error` attribute should
+be read as a diagnostic, not a proof that the true integration error is
+above or below the target.

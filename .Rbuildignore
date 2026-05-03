@@ -5,6 +5,7 @@
 ^pkgdown$
 ^\.github$
 ^cran-comments\.md$
+^vignettes/articles$
 ^\.positai$
 ^\.claude$
 ^SKILL\.md$

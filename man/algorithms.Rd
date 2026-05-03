@@ -89,6 +89,14 @@ reproducible without setting R's random-number seed. The reported error is a
 deterministic convergence diagnostic rather than a randomized Monte Carlo
 confidence statement.
 
+For paper citations of the new deterministic Sobol and Genz-Sobol backends, a
+useful reference trail is Sobol (1967) for the digital sequence; Caflisch
+(1998), or Glasserman (2004, Chapter 6), for quasi-Monte Carlo background and
+limitations; and Genz (1992), Genz and Bretz (2002, 2009), and related
+\pkg{mvtnorm} references for the sequential transformations and multivariate
+normal or \eqn{t} probability algorithms. BibTeX entries for these references
+are included in \file{inst/REFERENCES.bib}.
+
 For normal probabilities, smaller dimensions (up to 20) and non-singular
 covariance matrices,
 the algorithm by \bibcitet{mvtnorm::Miwa+Hayter+Kuriki:2003} can be used as well. This algorithm can

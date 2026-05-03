@@ -159,7 +159,7 @@ results <- do.call(rbind, lapply(c(4L, 8L, 12L), benchmark_dimension))
 
 | dim | method | seconds | value | diagnostic | target | rel error |
 |---:|:---|---:|---:|---:|:---|---:|
-| 4 | Default GenzBretz | 0.0000 | 0.16701894 | 1.155e-04 | met | 7.931e-05 |
+| 4 | Default GenzBretz | 0.0010 | 0.16701894 | 1.155e-04 | met | 7.931e-05 |
 | 4 | Miwa steps=128 | 0.0000 | 0.16700578 | NA | not requested | 5.0514e-07 |
 | 4 | Original randomized QMC | 0.0030 | 0.16700455 | 5.857e-06 | not requested | 6.8511e-06 |
 | 4 | DeterministicQMC C | 0.0040 | 0.16702089 | 2.769e-05 | not requested | 9.1038e-05 |
@@ -168,21 +168,21 @@ results <- do.call(rbind, lapply(c(4L, 8L, 12L), benchmark_dimension))
 | 4 | DeterministicQMC GenzSobol | 0.0000 | 0.16700289 | 3.374e-06 | met | 1.6792e-05 |
 | 4 | DeterministicQMC Auto | 0.0040 | 0.16700364 | 3.374e-06 | met | 1.23e-05 |
 | 8 | Default GenzBretz | 0.0020 | 0.036112684 | 1.662e-05 | met | 0.00068834 |
-| 8 | Miwa steps=128 | 0.0020 | 0.03639772 | NA | not requested | 0.0071992 |
-| 8 | Original randomized QMC | 0.0050 | 0.036109084 | 8.721e-06 | not requested | 0.00078794 |
+| 8 | Miwa steps=128 | 0.0030 | 0.03639772 | NA | not requested | 0.0071992 |
+| 8 | Original randomized QMC | 0.0060 | 0.036109084 | 8.721e-06 | not requested | 0.00078794 |
 | 8 | DeterministicQMC C | 0.0100 | 0.036122192 | 2.726e-05 | not requested | 0.00042521 |
-| 8 | DeterministicQMC Sobol | 0.0100 | 0.036102446 | 2.816e-05 | not requested | 0.00097164 |
-| 8 | DeterministicQMC Hybrid | 0.0090 | 0.036092146 | 3.989e-05 | not requested | 0.0012566 |
+| 8 | DeterministicQMC Sobol | 0.0090 | 0.036102446 | 2.816e-05 | not requested | 0.00097164 |
+| 8 | DeterministicQMC Hybrid | 0.0100 | 0.036092146 | 3.989e-05 | not requested | 0.0012566 |
 | 8 | DeterministicQMC GenzSobol | 0.0060 | 0.036098207 | 8.347e-06 | met | 0.0010889 |
 | 8 | DeterministicQMC Auto | 0.0080 | 0.036102678 | 9.872e-06 | met | 0.0009652 |
 | 12 | Default GenzBretz | 0.0130 | 0.0077504458 | 3.008e-06 | met | 0.0156 |
-| 12 | Miwa steps=128 | 0.1630 | 0.008486779 | NA | not requested | 0.077923 |
+| 12 | Miwa steps=128 | 0.1580 | 0.008486779 | NA | not requested | 0.077923 |
 | 12 | Original randomized QMC | 0.0120 | 0.0077504458 | 3.008e-06 | not requested | 0.0156 |
 | 12 | DeterministicQMC C | 0.0150 | 0.0077547872 | 1.415e-05 | not requested | 0.015049 |
-| 12 | DeterministicQMC Sobol | 0.0140 | 0.0077452405 | 1.280e-05 | not requested | 0.016261 |
+| 12 | DeterministicQMC Sobol | 0.0150 | 0.0077452405 | 1.280e-05 | not requested | 0.016261 |
 | 12 | DeterministicQMC Hybrid | 0.0140 | 0.0077383798 | 2.257e-05 | not requested | 0.017133 |
 | 12 | DeterministicQMC GenzSobol | 0.0100 | 0.0077417723 | 6.319e-06 | met | 0.016702 |
-| 12 | DeterministicQMC Auto | 0.0130 | 0.0077462859 | 6.282e-06 | met | 0.016129 |
+| 12 | DeterministicQMC Auto | 0.0120 | 0.0077462859 | 6.282e-06 | met | 0.016129 |
 
 ## Reading the results
 
@@ -276,6 +276,13 @@ low-discrepancy rule than the current Halton prototype. The important
 caveat is that the error attribute would still be deterministic: it
 could measure convergence and stability across fixed blocks, but it
 would not be a Monte Carlo confidence statement.
+
+For citation purposes, the Sobol-based rows should be tied to Sobol
+(1967) for the sequence, Caflisch (1998) or Glasserman (2004, Chapter 6)
+for QMC background, and the Genz/Genz-Bretz literature already cited by
+`mvtnorm` for the transformed multivariate normal and Student t
+probability algorithms. The corresponding BibTeX entries are in
+`inst/REFERENCES.bib`.
 
 ## Accuracy caveats
 

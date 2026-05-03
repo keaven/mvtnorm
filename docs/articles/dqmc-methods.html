@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mvtnorm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3-7-9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,6 +198,19 @@ is architectural: deterministic QMC scales by a point budget
 it more natural for deterministic optimization, reproducible simulation
 studies, and regression tests where exact repeatability is
 important.</p>
+<p>For paper citations of the new deterministic Sobol and Genz-Sobol
+backends, a good citation trail is:</p>
+<ul>
+<li>Sobol (1967) for the Sobol digital sequence;</li>
+<li>Caflisch (1998) or Glasserman (2004, Chapter 6) for quasi-Monte
+Carlo background, convergence motivation, and practical
+limitations;</li>
+<li>Genz (1992), Genz and Bretz (2002, 2009), and the existing
+<code>mvtnorm</code> references for the transformed multivariate normal
+and Student t integration algorithms.</li>
+</ul>
+<p>The corresponding BibTeX entries are kept in
+<code>inst/REFERENCES.bib</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/algorithms.html">GenzBretz</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $maxpts</span></span>
@@ -438,7 +451,10 @@ calculations where the mature randomized algorithm and stochastic error
 assessment are desired. Use <code><a href="../reference/algorithms.html">Miwa()</a></code> as a low-dimensional
 deterministic normal-probability check. Use
 <code><a href="../reference/algorithms.html">DeterministicQMC()</a></code> when reproducibility of the numerical
-path is more important than stochastic error assessment.</p>
+path is more important than stochastic error assessment. The
+deterministic <code>error</code> attribute should be read as a
+diagnostic, not a proof that the true integration error is above or
+below the target.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
