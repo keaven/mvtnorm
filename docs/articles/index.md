@@ -1,5 +1,19 @@
 # Articles
 
+### Core vignettes
+
+- [Using
+  mvtnorm](https://keaven.github.io/mvtnorm/articles/MVT_Rnews.md):
+
+  Original Sweave vignette introducing multivariate normal and t
+  probabilities in mvtnorm.
+
+- [Multivariate Normal
+  Log-likelihoods](https://keaven.github.io/mvtnorm/articles/lmvnorm_src.md):
+
+  Original Sweave vignette documenting multivariate normal likelihood
+  and score computations in mvtnorm.
+
 ### Deterministic QMC
 
 - [Deterministic QMC

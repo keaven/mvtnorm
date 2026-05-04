@@ -1,0 +1,20 @@
+---
+title: "Using mvtnorm"
+description: >
+  Original Sweave vignette introducing multivariate normal and t probabilities
+  in mvtnorm.
+resource_files:
+  - MVT_Rnews.pdf
+---
+
+This page makes the original Sweave vignette available from the pkgdown
+Articles index. The source vignette remains `vignettes/MVT_Rnews.Rnw`; the PDF
+is the installed vignette returned by:
+
+```r
+vignette("MVT_Rnews", package = "mvtnorm")
+```
+
+[Open the original PDF vignette](MVT_Rnews.pdf)
+
+<embed src="MVT_Rnews.pdf" type="application/pdf" width="100%" height="800px" />

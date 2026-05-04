@@ -19,6 +19,10 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Core vignettes</h6></li>
+    <li><a class="dropdown-item" href="../articles/MVT_Rnews.html">Using mvtnorm</a></li>
+    <li><a class="dropdown-item" href="../articles/lmvnorm_src.html">Multivariate Normal Log-likelihoods</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Deterministic QMC</h6></li>
     <li><a class="dropdown-item" href="../articles/dqmc-methods.html">Deterministic QMC Methodology</a></li>
     <li><a class="dropdown-item" href="../articles/dqmc-benchmark.html">Speed and Accuracy Comparison</a></li>
@@ -39,9 +43,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="multivariate-normal-functions">Multivariate normal functions<a class="anchor" aria-label="anchor" href="#multivariate-normal-functions"></a></h2>
 
-
+      <div class="section-desc"><p>Core package overview, distribution functions, likelihoods, and normal-model interfaces.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -49,62 +53,6 @@
 
 
       <dl><dt>
-
-          <code><a href="Mvnorm.html">dmvnorm()</a></code> <code><a href="Mvnorm.html">rmvnorm()</a></code>
-
-        </dt>
-        <dd>Multivariate Normal Density and Random Deviates</dd>
-
-        <dt>
-
-          <code><a href="Mvt.html">rmvt()</a></code> <code><a href="Mvt.html">dmvt()</a></code>
-
-        </dt>
-        <dd>The Multivariate t Distribution</dd>
-
-        <dt>
-
-          <code><a href="algorithms.html">GenzBretz()</a></code> <code><a href="algorithms.html">DeterministicQMC()</a></code> <code><a href="algorithms.html">Miwa()</a></code> <code><a href="algorithms.html">TVPACK()</a></code>
-
-        </dt>
-        <dd>Choice of Algorithm and Hyper Parameters</dd>
-
-        <dt>
-
-          <code><a href="interface.html">mvnorm()</a></code> <code><a href="interface.html">aperm(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">margDist()</a></code> <code><a href="interface.html">condDist()</a></code> <code><a href="interface.html">simulate(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">logLik(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">lLgrad(<i>&lt;mvnorm&gt;</i>)</a></code>
-
-        </dt>
-        <dd>User Interface to Multiple Multivariate Normal Distributions</dd>
-
-        <dt>
-
-          <code><a href="lpRR.html">lpRR()</a></code> <code><a href="lpRR.html">slpRR()</a></code>
-
-        </dt>
-        <dd>Multivariate Normal Log-likelihood and Score Functions for Reduced Rank Covariances</dd>
-
-        <dt>
-
-          <code><a href="lpmvnorm.html">lpmvnorm()</a></code> <code><a href="lpmvnorm.html">slpmvnorm()</a></code> <code><a href="lpmvnorm.html">ldmvnorm()</a></code> <code><a href="lpmvnorm.html">sldmvnorm()</a></code> <code><a href="lpmvnorm.html">ldpmvnorm()</a></code> <code><a href="lpmvnorm.html">sldpmvnorm()</a></code>
-
-        </dt>
-        <dd>Multivariate Normal Log-likelihood and Score Functions</dd>
-
-        <dt>
-
-          <code><a href="ltMatrices.html">ltMatrices()</a></code> <code><a href="ltMatrices.html">syMatrices()</a></code> <code><a href="ltMatrices.html">as.array(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">as.array(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;integer&gt;</i>)</a></code> <code><a href="ltMatrices.html">`diagonals&lt;-`()</a></code> <code><a href="ltMatrices.html">solve(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">chol(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;chol&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;invchol&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">deperma()</a></code> <code><a href="ltMatrices.html">Mult(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">Mult(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">Tcrossprod()</a></code> <code><a href="ltMatrices.html">Crossprod()</a></code> <code><a href="ltMatrices.html">tcrossprod(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">tcrossprod(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">crossprod(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">crossprod(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">logdet()</a></code> <code><a href="ltMatrices.html">Lower_tri()</a></code> <code><a href="ltMatrices.html">is.ltMatrices()</a></code> <code><a href="ltMatrices.html">is.syMatrices()</a></code> <code><a href="ltMatrices.html">as.ltMatrices()</a></code> <code><a href="ltMatrices.html">as.syMatrices()</a></code> <code><a href="ltMatrices.html">is.chol()</a></code> <code><a href="ltMatrices.html">is.invchol()</a></code> <code><a href="ltMatrices.html">as.chol()</a></code> <code><a href="ltMatrices.html">as.invchol()</a></code> <code><a href="ltMatrices.html">chol2cov()</a></code> <code><a href="ltMatrices.html">invchol2chol()</a></code> <code><a href="ltMatrices.html">chol2invchol()</a></code> <code><a href="ltMatrices.html">invchol2cov()</a></code> <code><a href="ltMatrices.html">invchol2pre()</a></code> <code><a href="ltMatrices.html">chol2pre()</a></code> <code><a href="ltMatrices.html">Dchol()</a></code> <code><a href="ltMatrices.html">invcholD()</a></code> <code><a href="ltMatrices.html">chol2cor()</a></code> <code><a href="ltMatrices.html">invchol2cor()</a></code> <code><a href="ltMatrices.html">chol2pc()</a></code> <code><a href="ltMatrices.html">invchol2pc()</a></code> <code><a href="ltMatrices.html">vectrick()</a></code> <code><a href="ltMatrices.html">standardize()</a></code> <code><a href="ltMatrices.html">destandardize()</a></code>
-
-        </dt>
-        <dd>Multiple Lower Triangular or Symmetric Matrices</dd>
-
-        <dt>
-
-          <code><a href="margcond.html">marg_mvnorm()</a></code> <code><a href="margcond.html">cond_mvnorm()</a></code>
-
-        </dt>
-        <dd>Marginal and Conditional Multivariate Normal Distributions</dd>
-
-        <dt>
 
           <code><a href="mvtnorm-package.html">mvtnorm-package</a></code> <code><a href="mvtnorm-package.html">mvtnorm</a></code>
 
@@ -120,10 +68,10 @@
 
         <dt>
 
-          <code><a href="pmvt.html">pmvt()</a></code>
+          <code><a href="Mvnorm.html">dmvnorm()</a></code> <code><a href="Mvnorm.html">rmvnorm()</a></code>
 
         </dt>
-        <dd>Multivariate t Distribution</dd>
+        <dd>Multivariate Normal Density and Random Deviates</dd>
 
         <dt>
 
@@ -134,12 +82,96 @@
 
         <dt>
 
+          <code><a href="lpmvnorm.html">lpmvnorm()</a></code> <code><a href="lpmvnorm.html">slpmvnorm()</a></code> <code><a href="lpmvnorm.html">ldmvnorm()</a></code> <code><a href="lpmvnorm.html">sldmvnorm()</a></code> <code><a href="lpmvnorm.html">ldpmvnorm()</a></code> <code><a href="lpmvnorm.html">sldpmvnorm()</a></code>
+
+        </dt>
+        <dd>Multivariate Normal Log-likelihood and Score Functions</dd>
+
+        <dt>
+
+          <code><a href="lpRR.html">lpRR()</a></code> <code><a href="lpRR.html">slpRR()</a></code>
+
+        </dt>
+        <dd>Multivariate Normal Log-likelihood and Score Functions for Reduced Rank Covariances</dd>
+
+        <dt>
+
+          <code><a href="interface.html">mvnorm()</a></code> <code><a href="interface.html">aperm(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">margDist()</a></code> <code><a href="interface.html">condDist()</a></code> <code><a href="interface.html">simulate(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">logLik(<i>&lt;mvnorm&gt;</i>)</a></code> <code><a href="interface.html">lLgrad(<i>&lt;mvnorm&gt;</i>)</a></code>
+
+        </dt>
+        <dd>User Interface to Multiple Multivariate Normal Distributions</dd>
+
+        <dt>
+
+          <code><a href="margcond.html">marg_mvnorm()</a></code> <code><a href="margcond.html">cond_mvnorm()</a></code>
+
+        </dt>
+        <dd>Marginal and Conditional Multivariate Normal Distributions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="t-distribution-functions">t-distribution functions<a class="anchor" aria-label="anchor" href="#t-distribution-functions"></a></h2>
+
+      <div class="section-desc"><p>Probability, density, random generation, and quantile functions for multivariate t distributions.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="pmvt.html">pmvt()</a></code>
+
+        </dt>
+        <dd>Multivariate t Distribution</dd>
+
+        <dt>
+
+          <code><a href="Mvt.html">rmvt()</a></code> <code><a href="Mvt.html">dmvt()</a></code>
+
+        </dt>
+        <dd>The Multivariate t Distribution</dd>
+
+        <dt>
+
           <code><a href="qmvt.html">qmvt()</a></code>
 
         </dt>
         <dd>Quantiles of the Multivariate t Distribution</dd>
+      </dl></div><div class="section level2">
+      <h2 id="algorithm-and-hyper-parameter-selection">Algorithm and hyper parameter selection<a class="anchor" aria-label="anchor" href="#algorithm-and-hyper-parameter-selection"></a></h2>
+
+      <div class="section-desc"><p>Algorithm constructors and integration-control parameters.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="algorithms.html">GenzBretz()</a></code> <code><a href="algorithms.html">DeterministicQMC()</a></code> <code><a href="algorithms.html">Miwa()</a></code> <code><a href="algorithms.html">TVPACK()</a></code>
+
+        </dt>
+        <dd>Choice of Algorithm and Hyper Parameters</dd>
+      </dl></div><div class="section level2">
+      <h2 id="matrix-functions">Matrix functions<a class="anchor" aria-label="anchor" href="#matrix-functions"></a></h2>
+
+      <div class="section-desc"><p>Lower-triangular and symmetric matrix classes, conversions, and linear algebra helpers.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="ltMatrices.html">ltMatrices()</a></code> <code><a href="ltMatrices.html">syMatrices()</a></code> <code><a href="ltMatrices.html">as.array(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">as.array(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="ltMatrices.html">diagonals(<i>&lt;integer&gt;</i>)</a></code> <code><a href="ltMatrices.html">`diagonals&lt;-`()</a></code> <code><a href="ltMatrices.html">solve(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">chol(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;chol&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;invchol&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">aperm(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">deperma()</a></code> <code><a href="ltMatrices.html">Mult(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">Mult(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">Tcrossprod()</a></code> <code><a href="ltMatrices.html">Crossprod()</a></code> <code><a href="ltMatrices.html">tcrossprod(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">tcrossprod(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">crossprod(<i>&lt;ltMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">crossprod(<i>&lt;syMatrices&gt;</i>)</a></code> <code><a href="ltMatrices.html">logdet()</a></code> <code><a href="ltMatrices.html">Lower_tri()</a></code> <code><a href="ltMatrices.html">is.ltMatrices()</a></code> <code><a href="ltMatrices.html">is.syMatrices()</a></code> <code><a href="ltMatrices.html">as.ltMatrices()</a></code> <code><a href="ltMatrices.html">as.syMatrices()</a></code> <code><a href="ltMatrices.html">is.chol()</a></code> <code><a href="ltMatrices.html">is.invchol()</a></code> <code><a href="ltMatrices.html">as.chol()</a></code> <code><a href="ltMatrices.html">as.invchol()</a></code> <code><a href="ltMatrices.html">chol2cov()</a></code> <code><a href="ltMatrices.html">invchol2chol()</a></code> <code><a href="ltMatrices.html">chol2invchol()</a></code> <code><a href="ltMatrices.html">invchol2cov()</a></code> <code><a href="ltMatrices.html">invchol2pre()</a></code> <code><a href="ltMatrices.html">chol2pre()</a></code> <code><a href="ltMatrices.html">Dchol()</a></code> <code><a href="ltMatrices.html">invcholD()</a></code> <code><a href="ltMatrices.html">chol2cor()</a></code> <code><a href="ltMatrices.html">invchol2cor()</a></code> <code><a href="ltMatrices.html">chol2pc()</a></code> <code><a href="ltMatrices.html">invchol2pc()</a></code> <code><a href="ltMatrices.html">vectrick()</a></code> <code><a href="ltMatrices.html">standardize()</a></code> <code><a href="ltMatrices.html">destandardize()</a></code>
+
+        </dt>
+        <dd>Multiple Lower Triangular or Symmetric Matrices</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

@@ -8,8 +8,40 @@ navbar:
     left: [reference, articles, news]
 
 articles:
+- title: Core vignettes
+  navbar: Core vignettes
+  contents:
+  - articles/MVT_Rnews
+  - articles/lmvnorm_src
 - title: Deterministic QMC
   navbar: Deterministic QMC
   contents:
   - articles/dqmc-methods
   - articles/dqmc-benchmark
+
+reference:
+- title: Multivariate normal functions
+  desc: Core package overview, distribution functions, likelihoods, and normal-model interfaces.
+  contents:
+  - mvtnorm-package
+  - pmvnorm
+  - Mvnorm
+  - qmvnorm
+  - lpmvnorm
+  - lpRR
+  - interface
+  - margcond
+- title: t-distribution functions
+  desc: Probability, density, random generation, and quantile functions for multivariate t distributions.
+  contents:
+  - pmvt
+  - Mvt
+  - qmvt
+- title: Algorithm and hyper parameter selection
+  desc: Algorithm constructors and integration-control parameters.
+  contents:
+  - algorithms
+- title: Matrix functions
+  desc: Lower-triangular and symmetric matrix classes, conversions, and linear algebra helpers.
+  contents:
+  - ltMatrices

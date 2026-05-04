@@ -163,7 +163,7 @@ results <- do.call(rbind, lapply(c(4L, 8L, 12L), benchmark_dimension))
 | 4 | Miwa steps=128 | 0.0000 | 0.16700578 | NA | not requested | 5.0514e-07 |
 | 4 | Original randomized QMC | 0.0030 | 0.16700455 | 5.857e-06 | not requested | 6.8511e-06 |
 | 4 | DeterministicQMC C | 0.0040 | 0.16702089 | 2.769e-05 | not requested | 9.1038e-05 |
-| 4 | DeterministicQMC Sobol | 0.0040 | 0.16700506 | 4.636e-05 | not requested | 3.7882e-06 |
+| 4 | DeterministicQMC Sobol | 0.0030 | 0.16700506 | 4.636e-05 | not requested | 3.7882e-06 |
 | 4 | DeterministicQMC Hybrid | 0.0040 | 0.16700114 | 4.554e-05 | not requested | 2.7256e-05 |
 | 4 | DeterministicQMC GenzSobol | 0.0000 | 0.16700289 | 3.374e-06 | met | 1.6792e-05 |
 | 4 | DeterministicQMC Auto | 0.0040 | 0.16700364 | 3.374e-06 | met | 1.23e-05 |
@@ -172,14 +172,14 @@ results <- do.call(rbind, lapply(c(4L, 8L, 12L), benchmark_dimension))
 | 8 | Original randomized QMC | 0.0060 | 0.036109084 | 8.721e-06 | not requested | 0.00078794 |
 | 8 | DeterministicQMC C | 0.0100 | 0.036122192 | 2.726e-05 | not requested | 0.00042521 |
 | 8 | DeterministicQMC Sobol | 0.0090 | 0.036102446 | 2.816e-05 | not requested | 0.00097164 |
-| 8 | DeterministicQMC Hybrid | 0.0100 | 0.036092146 | 3.989e-05 | not requested | 0.0012566 |
+| 8 | DeterministicQMC Hybrid | 0.0090 | 0.036092146 | 3.989e-05 | not requested | 0.0012566 |
 | 8 | DeterministicQMC GenzSobol | 0.0060 | 0.036098207 | 8.347e-06 | met | 0.0010889 |
-| 8 | DeterministicQMC Auto | 0.0080 | 0.036102678 | 9.872e-06 | met | 0.0009652 |
-| 12 | Default GenzBretz | 0.0130 | 0.0077504458 | 3.008e-06 | met | 0.0156 |
-| 12 | Miwa steps=128 | 0.1580 | 0.008486779 | NA | not requested | 0.077923 |
+| 8 | DeterministicQMC Auto | 0.0090 | 0.036102678 | 9.872e-06 | met | 0.0009652 |
+| 12 | Default GenzBretz | 0.0120 | 0.0077504458 | 3.008e-06 | met | 0.0156 |
+| 12 | Miwa steps=128 | 0.1600 | 0.008486779 | NA | not requested | 0.077923 |
 | 12 | Original randomized QMC | 0.0120 | 0.0077504458 | 3.008e-06 | not requested | 0.0156 |
 | 12 | DeterministicQMC C | 0.0150 | 0.0077547872 | 1.415e-05 | not requested | 0.015049 |
-| 12 | DeterministicQMC Sobol | 0.0150 | 0.0077452405 | 1.280e-05 | not requested | 0.016261 |
+| 12 | DeterministicQMC Sobol | 0.0140 | 0.0077452405 | 1.280e-05 | not requested | 0.016261 |
 | 12 | DeterministicQMC Hybrid | 0.0140 | 0.0077383798 | 2.257e-05 | not requested | 0.017133 |
 | 12 | DeterministicQMC GenzSobol | 0.0100 | 0.0077417723 | 6.319e-06 | met | 0.016702 |
 | 12 | DeterministicQMC Auto | 0.0120 | 0.0077462859 | 6.282e-06 | met | 0.016129 |
