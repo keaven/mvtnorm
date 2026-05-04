@@ -38,6 +38,9 @@ package’s historical CRAN release notes remain in `inst/NEWS.Rd`.
     QMC behavior while retaining the existing regression tests.
 - Added Sobol, quasi-Monte Carlo, and Genz integration references for
   the new deterministic QMC backends.
+- Added pkgdown article entries for the original Sweave vignettes and
+  grouped the reference index into multivariate normal, t-distribution,
+  algorithm, and matrix-function sections.
 
 #### Notes
 

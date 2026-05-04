@@ -15,6 +15,7 @@ PDF is the installed vignette returned by:
 vignette("lmvnorm_src", package = "mvtnorm")
 ```
 
-[Open the original PDF vignette](lmvnorm_src.pdf)
+The local in-browser PDF preview can render as a blank or black pane on some
+systems, so the PDF is linked rather than embedded here.
 
-<embed src="lmvnorm_src.pdf" type="application/pdf" width="100%" height="800px" />
+[Open the original PDF vignette](lmvnorm_src.pdf)
